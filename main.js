@@ -25,7 +25,8 @@ $(document).ready(function () {
         isAutoplayActive: false,
         currentFontSize: 1.6, // Tamanho inicial em rem
         isLastPrayer: false, // Indica se é a última oração do rosário
-        highlightFinished: false // Indica se o highlight da última oração terminou
+        highlightFinished: false, // Indica se o highlight da última oração terminou
+        activeMysteries: { joyful: true, sorrowful: true, glorious: true, luminous: false } // Estado inicial dos mistérios ativos
     };
 
     // Cache de elementos jQuery
@@ -46,6 +47,12 @@ $(document).ready(function () {
         modalPortugueseBtn: $('#modalPortugueseBtn'),
         modalLatinBtn: $('#modalLatinBtn'),
         savePreference: $('#savePreference'),
+        // Checkboxes de seleção de mistérios
+        mysteryCheckboxes: $('.mystery-checkbox'),
+        joyfulCheckbox: $('#joyfulCheckbox'),
+        sorrowfulCheckbox: $('#sorrowfulCheckbox'),
+        gloriousCheckbox: $('#gloriousCheckbox'),
+        luminousCheckbox: $('#luminousCheckbox'),
         // Novos elementos para a interface de slide
         prayerSlide: $('<div class="prayer-slide">' +
             '<div class="prayer-content"><h3 class="prayer-title text-xl font-semibold mb-4"></h3><p class="prayer-text"></p></div>' +
@@ -104,7 +111,9 @@ $(document).ready(function () {
         resetHighlightBtn: null, // Será definido abaixo (para o botão de reset)
         // Elementos do modal de conclusão
         completionModal: $('#completionModal'),
-        closeCompletionModalBtn: $('#closeCompletionModalBtn')
+        closeCompletionModalBtn: $('#closeCompletionModalBtn'),
+        // Elementos da legenda
+        calendarLegend: $('#calendarLegend')
     };
 
     // Define os elementos do slide e controles após criá-los
@@ -135,6 +144,98 @@ $(document).ready(function () {
     // Botão de finalizar (será criado dinamicamente quando necessário)
     $elements.finishPrayerBtn = null;
 
+    // --- Funções de Preferência de Mistérios ---
+
+    /**
+     * Carrega as preferências de mistérios ativos do localStorage.
+     */
+    function loadMysteryPreferences() {
+        const savedPrefs = localStorage.getItem('activeMysteries');
+        if (savedPrefs) {
+            try {
+                const parsedPrefs = JSON.parse(savedPrefs);
+                // Valida se o formato é o esperado
+                if (typeof parsedPrefs === 'object' && parsedPrefs !== null &&
+                    'joyful' in parsedPrefs && 'sorrowful' in parsedPrefs &&
+                    'glorious' in parsedPrefs && 'luminous' in parsedPrefs) {
+                    state.activeMysteries = parsedPrefs;
+                } else {
+                    console.warn("Preferências de mistérios salvas em formato inválido. Usando padrão.");
+                    // Se inválido, salva o padrão para corrigir
+                    saveMysteryPreferences();
+                }
+            } catch (e) {
+                console.error("Erro ao parsear preferências de mistérios:", e);
+                // Se erro no parse, salva o padrão
+                saveMysteryPreferences();
+            }
+        }
+        // Aplica as preferências carregadas (ou padrão) aos checkboxes
+        $elements.joyfulCheckbox.prop('checked', state.activeMysteries.joyful);
+        $elements.sorrowfulCheckbox.prop('checked', state.activeMysteries.sorrowful);
+        $elements.gloriousCheckbox.prop('checked', state.activeMysteries.glorious);
+        $elements.luminousCheckbox.prop('checked', state.activeMysteries.luminous);
+    }
+
+    /**
+     * Salva o estado atual dos checkboxes de mistérios no localStorage.
+     */
+    function saveMysteryPreferences() {
+        state.activeMysteries.joyful = $elements.joyfulCheckbox.is(':checked');
+        state.activeMysteries.sorrowful = $elements.sorrowfulCheckbox.is(':checked');
+        state.activeMysteries.glorious = $elements.gloriousCheckbox.is(':checked');
+        state.activeMysteries.luminous = $elements.luminousCheckbox.is(':checked');
+        localStorage.setItem('activeMysteries', JSON.stringify(state.activeMysteries));
+    }
+
+    /**
+     * Atualiza as opções do dropdown de mistérios (#mysteryType)
+     * com base nos checkboxes ativos.
+     */
+    function updateMysteryDropdown() {
+        const currentSelectedValue = $elements.mysteryType.val();
+        $elements.mysteryType.empty(); // Limpa opções existentes
+
+        const mysteryOptions = [
+            { value: 'joyful', text: 'Mistérios Gozosos' },
+            { value: 'sorrowful', text: 'Mistérios Dolorosos' },
+            { value: 'glorious', text: 'Mistérios Gloriosos' },
+            { value: 'luminous', text: 'Mistérios Luminosos' }
+        ];
+
+        let firstAvailableOption = null;
+        let currentSelectionStillAvailable = false;
+
+        mysteryOptions.forEach(option => {
+            if (state.activeMysteries[option.value]) {
+                const $option = $(`<option value="${option.value}">${option.text}</option>`);
+                $elements.mysteryType.append($option);
+                if (!firstAvailableOption) {
+                    firstAvailableOption = option.value; // Guarda a primeira opção ativa
+                }
+                if (option.value === currentSelectedValue) {
+                    currentSelectionStillAvailable = true; // Marca se a seleção atual ainda está ativa
+                }
+            }
+        });
+
+        // Define a seleção no dropdown
+        if (currentSelectionStillAvailable) {
+            $elements.mysteryType.val(currentSelectedValue); // Mantém a seleção se ainda ativa
+        } else if (firstAvailableOption) {
+            $elements.mysteryType.val(firstAvailableOption); // Seleciona a primeira ativa se a anterior foi desativada
+        } else {
+            // Caso extremo: nenhum mistério ativo (adiciona uma opção desabilitada)
+            $elements.mysteryType.append('<option value="" disabled>Nenhum mistério ativo</option>');
+            $elements.mysteryType.val('');
+        }
+
+        // Atualiza o estado interno após definir o valor do dropdown
+        state.currentMysteryType = $elements.mysteryType.val();
+    }
+
+    // --- Funções de Idioma ---
+
     // Verifica se há preferência de idioma salva
     function checkLanguagePreference() {
         const savedPreference = localStorage.getItem('rosaryLanguagePreference');
@@ -156,7 +257,37 @@ $(document).ready(function () {
         $elements.languageModal.removeClass('active');
     }
 
-    // Define o mistério do Rosário baseado no dia da semana
+    // Define o mistério do Rosário baseado no dia da semana, respeitando as preferências
+    function setMysteryByDay() {
+        const dayOfWeek = new Date().getDay(); // 0=Domingo, 1=Segunda, ..., 6=Sábado
+        let mysteryKey = 'joyful'; // Padrão inicial
+
+        switch (dayOfWeek) {
+            case 1: case 6: mysteryKey = 'joyful'; break; // Seg, Sab
+            case 2: case 5: mysteryKey = 'sorrowful'; break; // Ter, Sex
+            case 3: case 0: mysteryKey = 'glorious'; break; // Qua, Dom
+            case 4: mysteryKey = 'luminous'; break; // Qui
+        }
+
+        // Verifica se o mistério do dia está ativo nas preferências
+        if (state.activeMysteries[mysteryKey]) {
+            state.currentMysteryType = mysteryKey; // Define o tipo no estado
+            $elements.mysteryType.val(mysteryKey); // Seleciona no dropdown
+        } else {
+            // Se o mistério do dia não estiver ativo, seleciona o primeiro ativo no dropdown
+            const firstActiveOption = $elements.mysteryType.find('option:first').val();
+            if (firstActiveOption) {
+                state.currentMysteryType = firstActiveOption;
+                $elements.mysteryType.val(firstActiveOption);
+            } else {
+                // Nenhum mistério ativo, o dropdown já deve ter a opção "Nenhum..."
+                state.currentMysteryType = '';
+            }
+        }
+        console.log("Mistério inicial definido para:", state.currentMysteryType || "Nenhum");
+    }
+
+    /* Comentado: A lógica antiga de definir o mistério padrão foi movida para setMysteryByDay
     const diaSemana = new Date().getDay(); // 0=Domingo, 1=Segunda, ..., 6=Sábado
     let mistérioPadrão = 'joyful'; // Padrão inicial
 
@@ -181,38 +312,107 @@ $(document).ready(function () {
 
     // Aplica o mistério padrão e atualiza a interface
     state.currentMystery = mistérioPadrão; // Atualiza o estado global
-    $elements.mysteryType.val(mistérioPadrão);
+    $elements.mysteryType.val(mistérioPadrão); // Esta linha é redundante agora com setMysteryByDay
     // A exibição dos mistérios na lista original não é mais necessária, pois ela está escondida.
     //$('#' + mistérioPadrão + '-mysteries').show(); // Comentado ou removido
+    */
+
+    // --- Funções da Legenda do Calendário ---
+
+    /**
+     * Atualiza a aparência da legenda do calendário com base nos mistérios ativos.
+     */
+    function updateLegend() {
+        const mysteryColors = {
+            joyful: 'bg-blue-200 border-blue-400',
+            sorrowful: 'bg-red-200 border-red-400',
+            glorious: 'bg-yellow-200 border-yellow-400',
+            luminous: 'bg-purple-200 border-purple-400',
+            disabled: 'bg-gray-300 border-gray-400' // Cor para desativado
+        };
+
+        Object.keys(state.activeMysteries).forEach(key => {
+            const $legendItem = $(`#legend-${key}`);
+            if (!$legendItem.length) return; // Pula se o item da legenda não existir
+
+            const $colorBox = $legendItem.find('.legend-color-box');
+            const $disabledTag = $legendItem.find('.legend-disabled-tag');
+            const isActive = state.activeMysteries[key];
+
+            // Remove todas as classes de cor anteriores e de estado desativado
+            $colorBox.removeClass('bg-blue-100 bg-red-100 bg-yellow-100 bg-purple-100 bg-gray-300');
+            $legendItem.removeClass('text-gray-500 opacity-70');
+
+            if (isActive) {
+                $colorBox.addClass(mysteryColors[key] || mysteryColors.disabled); // Adiciona cor ativa
+                $disabledTag.addClass('hidden'); // Esconde tag (desativado)
+            } else {
+                $colorBox.addClass(mysteryColors.disabled); // Adiciona cor cinza
+                $legendItem.addClass('text-gray-500 opacity-70'); // Aplica estilo cinza/opaco ao item
+                $disabledTag.removeClass('hidden'); // Mostra tag (desativado)
+            }
+        });
+    }
+
+    // --- Funções para Mistério do Dia e Calendário ---
 
     /**
      * Carrega os textos das orações do arquivo JSON
      * usando jQuery.ajax() em vez de fetch()
      */
-    function loadPrayerTexts() {
+     function loadPrayerTexts() {
         $.ajax({
             url: 'rosario_textos.json',
             dataType: 'json',
             success: function (data) {
-                prayerData = {}; // Limpa dados anteriores
-                let idCounter = 1; // Contador para IDs únicos
+                prayerData = {
+                    common: {}, // Orações comuns (Sinal da Cruz, Pai Nosso, etc.)
+                    mysteries: {}, // Anúncios dos mistérios e títulos gerais
+                    mysteryTitles: {} // Títulos gerais dos tipos de mistério (Gozosos, etc.)
+                };
+                let commonIdCounter = 1;
 
-                // Mapeia os textos para um objeto com IDs únicos
+                // 1. Processa Orações Comuns (sections)
                 $.each(data.sections, function (i, section) {
+                    const headerKey = section.header || `section_${i}`; // Usa header como chave ou um fallback
                     $.each(section.items, function (j, item) {
-                        const prayerId = idCounter++;
-                        prayerData[prayerId] = {
-                            id: prayerId,
-                            portuguese: item.portuguese.text,
-                            latin: item.latin.text,
-                            // Adiciona um nome identificador (pode ser melhorado)
-                            name: item.portuguese.text.split(' ').slice(0, 3).join(' ') + '...'
+                        const prayerId = commonIdCounter++;
+                        prayerData.common[headerKey] = { // Usa headerKey como identificador
+                            id: prayerId, // ID numérico sequencial
+                            key: headerKey, // Chave textual (header)
+                            'pt-br': item['pt-br'], // Usa 'pt-br' (com hífen) como chave
+                            la: item['la'] // Mantém title e text
                         };
                     });
                 });
 
-                // Define o mistério padrão inicial
-                setMysteryByDay();
+                // 2. Processa Mistérios (mysteries)
+                if (data.mysteries && data.mysteries.langs) {
+                    prayerData.mysteries = data.mysteries.langs; // Armazena toda a estrutura dos mistérios
+
+                    // Extrai títulos gerais dos mistérios para fácil acesso
+                    $.each(data.mysteries.langs['pt-br'], function(mysteryKey, mysteryData) {
+                        if (mysteryData.title) {
+                            if (!prayerData.mysteryTitles['pt-br']) prayerData.mysteryTitles['pt-br'] = {};
+                            prayerData.mysteryTitles['pt-br'][mysteryKey] = mysteryData.title;
+                        }
+                    });
+                     $.each(data.mysteries.langs['la'], function(mysteryKey, mysteryData) {
+                        if (mysteryData.title) {
+                             if (!prayerData.mysteryTitles['la']) prayerData.mysteryTitles['la'] = {};
+                            prayerData.mysteryTitles['la'][mysteryKey] = mysteryData.title;
+                        }
+                    });
+                } else {
+                    console.error("Estrutura 'mysteries.langs' não encontrada ou inválida no JSON.");
+                }
+
+                // 3. Adiciona IDs específicos para orações que serão referenciadas diretamente na sequência
+                //    (Isso pode ser ajustado conforme a implementação de buildPrayerSequence)
+                // Exemplo: Mapear 'pater_noster' para um ID fixo se necessário,
+                // mas por enquanto vamos referenciar por chave ('pater_noster', 'ave_maria', etc.)
+
+                console.log("Dados das orações carregados:", prayerData); // Log para depuração
 
                 // Inicializar a aplicação após carregar os textos
                 initializeApp();
@@ -235,11 +435,22 @@ $(document).ready(function () {
 
         // Configura eventos
         $elements.startPrayer.on('click', startPrayerSlide);
-        $elements.portugueseBtn.on('click', function () { setLanguage(false); });
-        $elements.latinBtn.on('click', function () { setLanguage(true); });
+        $elements.portugueseBtn.on('click', function () { setLanguage(false); localStorage.setItem('rosaryLanguagePreference', 'portuguese'); });
+        $elements.latinBtn.on('click', function () { setLanguage(true); localStorage.setItem('rosaryLanguagePreference', 'latin'); });
         $elements.mysteryType.on('change', updateMysteryType);
         $elements.prayerSlideCloseBtn.on('click', closePrayerSlide);
         $elements.closeCompletionModalBtn.on('click', hideCompletionModal); // Evento para fechar modal de conclusão
+
+        // Evento para checkboxes de mistério
+        $elements.mysteryCheckboxes.on('change', function() {
+            saveMysteryPreferences();
+            updateMysteryDropdown();
+            // Opcional: Atualizar calendário/mistério do dia imediatamente
+            displayDailyMystery(); // Atualiza o texto do mistério do dia
+            const today = new Date();
+            generateCalendar(today.getFullYear(), today.getMonth()); // Regenera calendário com novos status
+            updateLegend(); // Atualiza a legenda
+        });
 
         // Eventos para controles adicionais (mobile)
         $elements.increaseFontBtn.on('click', increaseFontSize);
@@ -281,6 +492,10 @@ $(document).ready(function () {
         // Eventos de toque (swipe) para navegação
         setupTouchEvents();
 
+        // Carrega preferências de mistérios e atualiza UI relacionada
+        loadMysteryPreferences();
+        updateMysteryDropdown();
+
         // Verifica preferência de idioma salva
         const hasSavedPreference = checkLanguagePreference();
         if (!hasSavedPreference) {
@@ -294,10 +509,14 @@ $(document).ready(function () {
         setHighlightSpeedUI(state.highlightSpeedMultiplier); // Marca o botão padrão (1x)
         updateAutoplayButtonUI(); // Define o estado inicial do botão autoplay
 
-        // Exibe o mistério do dia e gera o calendário
+        // Define o mistério inicial no dropdown baseado no dia E nas preferências
+        setMysteryByDay();
+
+        // Exibe o mistério do dia e gera o calendário (respeitando preferências)
         displayDailyMystery();
         const today = new Date();
         generateCalendar(today.getFullYear(), today.getMonth());
+        updateLegend(); // Atualiza a legenda inicial
     }
 
     // --- Funções para Mistério do Dia e Calendário ---
@@ -305,25 +524,34 @@ $(document).ready(function () {
     /**
      * Retorna o nome, chave e classe CSS do mistério para uma data específica.
      * @param {Date} date - O objeto Date para verificar.
-     * @returns {object} - Objeto com { name, key, colorClass }.
+     * @returns {object} - Objeto com { name, key, colorClass, isActive }.
      */
     function getMysteryForDate(date) {
         const dayOfWeek = date.getDay(); // 0=Domingo, 1=Segunda, ..., 6=Sábado
+        let mysteryInfo = { name: 'Desconhecido', key: 'unknown', colorClass: 'bg-gray-100 text-gray-800 border-gray-300', isActive: false };
+
         switch (dayOfWeek) {
             case 1: // Segunda
             case 6: // Sábado
-                return { name: 'Mistérios Gozosos', key: 'joyful', colorClass: 'bg-blue-100 text-blue-800 border-blue-300' };
+                mysteryInfo = { name: 'Mistérios Gozosos', key: 'joyful', colorClass: 'bg-blue-100 text-blue-800 border-blue-300' };
+                break;
             case 2: // Terça
             case 5: // Sexta
-                return { name: 'Mistérios Dolorosos', key: 'sorrowful', colorClass: 'bg-red-100 text-red-800 border-red-300' };
+                mysteryInfo = { name: 'Mistérios Dolorosos', key: 'sorrowful', colorClass: 'bg-red-100 text-red-800 border-red-300' };
+                break;
             case 3: // Quarta
             case 0: // Domingo
-                return { name: 'Mistérios Gloriosos', key: 'glorious', colorClass: 'bg-yellow-100 text-yellow-800 border-yellow-300' };
+                mysteryInfo = { name: 'Mistérios Gloriosos', key: 'glorious', colorClass: 'bg-yellow-100 text-yellow-800 border-yellow-300' };
+                break;
             case 4: // Quinta
-                return { name: 'Mistérios Luminosos', key: 'luminous', colorClass: 'bg-purple-100 text-purple-800 border-purple-300' };
-            default:
-                return { name: 'Desconhecido', key: 'unknown', colorClass: 'bg-gray-100 text-gray-800 border-gray-300' };
+                mysteryInfo = { name: 'Mistérios Luminosos', key: 'luminous', colorClass: 'bg-purple-100 text-purple-800 border-purple-300' };
+                break;
         }
+
+        // Verifica se o mistério determinado está ativo nas preferências do usuário
+        mysteryInfo.isActive = state.activeMysteries[mysteryInfo.key] ?? false; // Usa ?? para caso a key seja 'unknown'
+
+        return mysteryInfo;
     }
 
     /**
@@ -334,7 +562,11 @@ $(document).ready(function () {
         const mystery = getMysteryForDate(today);
         const $dailyMysteryText = $('#dailyMysteryText');
         if ($dailyMysteryText.length) {
-            $dailyMysteryText.text(`${mystery.name} (${today.toLocaleDateString('pt-BR', { weekday: 'long' })})`);
+            let text = `${mystery.name} (${today.toLocaleDateString('pt-BR', { weekday: 'long' })})`;
+            if (!mystery.isActive && mystery.key !== 'unknown') {
+                text += ' <span class="text-xs text-red-600 font-medium">(Desativado nas opções)</span>';
+            }
+            $dailyMysteryText.html(text); // Usa .html() para renderizar o span
             // Opcional: Adicionar classe ao container para estilização
             // $('#dailyMysteryContainer').addClass(mystery.colorClass.split(' ')[0]); // Adiciona a classe de fundo
         } else {
@@ -394,13 +626,22 @@ $(document).ready(function () {
         for (let day = 1; day <= daysInMonth; day++) {
             const date = new Date(year, month, day);
             const mystery = getMysteryForDate(date);
+            // const mystery = getMysteryForDate(date); // Linha duplicada removida
             let dayClasses = `p-1.5 border rounded text-xs cursor-default transition-colors ${mystery.colorClass}`;
             let title = `Dia ${day}: ${mystery.name}`;
+
+            // Adiciona estilo se o mistério do dia estiver desativado
+            if (!mystery.isActive && mystery.key !== 'unknown') {
+                dayClasses += ' opacity-60 grayscale-[50%]'; // Estilo para desativado
+                title += " (Desativado)";
+            }
 
             // Marca o dia atual
             if (year === currentYear && month === currentMonth && day === currentDay) {
                 dayClasses += ' ring-2 ring-indigo-500 font-bold'; // Destaque extra para hoje
-                title += " (Hoje)";
+                if (!title.includes("(Hoje)")) { // Evita duplicar "(Hoje)"
+                    title += " (Hoje)";
+                }
             }
 
             $grid.append(`<div class="${dayClasses}" title="${title}" data-mystery="${mystery.key}">${day}</div>`);
@@ -524,15 +765,21 @@ $(document).ready(function () {
     }
 
     function updateMysteryType() {
-        state.currentMysteryType = $elements.mysteryType.val();
-        // Se o slide estiver ativo, talvez reiniciar ou avisar o usuário? Por enquanto, apenas atualiza o estado. A sequência será reconstruída na próxima vez que 'startPrayerSlide' for chamado.
-        if (state.prayerSlideActive) {
-            // Opcional: Poderia fechar o slide e pedir para reiniciar, ou reconstruir a sequência e ir para o início. Por simplicidade, vamos apenas logar uma mensagem.
-            console.log("Tipo de mistério alterado. A nova sequência será usada na próxima vez que iniciar a oração.");
+        const newMysteryType = $elements.mysteryType.val();
+        if (newMysteryType !== state.currentMysteryType) {
+            state.currentMysteryType = newMysteryType;
+            // Se o slide estiver ativo, talvez reiniciar ou avisar o usuário?
+            // Por enquanto, apenas atualiza o estado. A sequência será reconstruída
+            // na próxima vez que 'startPrayerSlide' for chamado.
+            if (state.prayerSlideActive) {
+                console.log("Tipo de mistério alterado no dropdown. A nova sequência será usada na próxima vez que iniciar a oração.");
+                // Poderia adicionar um aviso visual ou fechar o slide aqui.
+            }
         }
     }
 
-    function setMysteryByDay() {
+    /* Removido: A lógica foi movida para a nova função setMysteryByDay que considera preferências
+    function setMysteryByDay_OLD() {
         const dayOfWeek = new Date().getDay(); // 0=Domingo, 1=Segunda, ..., 6=Sábado
         let defaultMystery = 'joyful';
         switch (dayOfWeek) {
@@ -544,29 +791,53 @@ $(document).ready(function () {
         state.currentMysteryType = defaultMystery; // Define o tipo no estado
         $elements.mysteryType.val(defaultMystery);
     }
+    */
 
     function displayCurrentPrayer() {
         if (currentPrayerIndex < 0 || currentPrayerIndex >= prayerSequence.length) return;
 
         const prayerInfo = prayerSequence[currentPrayerIndex];
-        const prayerId = prayerInfo.id;
-        const prayer = prayerData[prayerId];
+        const langKey = state.isLatin ? 'la' : 'pt-br';
         const $prayerContent = $elements.prayerSlide.find('.prayer-content');
+        let text = "Erro: Texto não encontrado.";
+        let title = "Erro";
 
-        if (!prayer) {
-            console.error(`Oração com ID ${prayerId} não encontrada.`);
-            $elements.prayerSlideText.text("Erro ao carregar oração.");
-            $elements.prayerSlideTitle.text("Erro");
-            return;
+        try {
+            if (prayerInfo.type === 'common') {
+                const prayerKey = prayerInfo.key;
+                if (prayerData.common[prayerKey] && prayerData.common[prayerKey][langKey]) {
+                    const prayerDetails = prayerData.common[prayerKey][langKey];
+                    text = prayerDetails.text || text; // Usa fallback se texto estiver vazio
+                    title = prayerDetails.title || title; // Usa fallback se título estiver vazio
+                } else {
+                    console.error(`Oração comum com chave '${prayerKey}' ou idioma '${langKey}' não encontrada.`);
+                }
+            } else if (prayerInfo.type === 'mystery_announcement') {
+                const mysteryType = prayerInfo.mysteryType;
+                const mysteryIndex = prayerInfo.mysteryIndex;
+                if (prayerData.mysteries[langKey] &&
+                    prayerData.mysteries[langKey][mysteryType] &&
+                    prayerData.mysteries[langKey][mysteryType][mysteryIndex])
+                {
+                    text = prayerData.mysteries[langKey][mysteryType][mysteryIndex]; // O texto é o próprio anúncio
+
+                    // Constrói um título (ex: "Mistérios Gozosos - Primeiro Mistério")
+                    const generalMysteryTitle = prayerData.mysteryTitles[langKey]?.[mysteryType] || mysteryType; // Título geral ou a chave
+                    // Pega a primeira parte do anúncio como sub-título (ex: "A Anunciação...")
+                    const announcementStart = text.split(':').length > 1 ? text.split(':')[1].trim().split(' ').slice(0, 4).join(' ') + '...' : text.split(' ').slice(0, 4).join(' ') + '...';
+                    title = `${generalMysteryTitle} - ${announcementStart}`;
+
+                } else {
+                    console.error(`Anúncio do mistério ${mysteryType} - ${mysteryIndex} não encontrado para o idioma ${langKey}.`);
+                }
+            } else {
+                console.error(`Tipo de item desconhecido na sequência: ${prayerInfo.type}`);
+            }
+        } catch (e) {
+            console.error("Erro ao processar dados da oração:", e, prayerInfo);
+            // Mantém texto/título de erro definidos inicialmente
         }
 
-        const text = state.isLatin ? prayer.latin : prayer.portuguese;
-        // Título mais descritivo, usando o nome completo se curto, ou início se longo
-        let titleText = state.isLatin ? prayerData[prayerInfo.titleId || prayerId].latin : prayerData[prayerInfo.titleId || prayerId].portuguese;
-        if (titleText.length > 50) { // Limita o tamanho do título exibido
-            titleText = titleText.split(' ').slice(0, 5).join(' ') + '...';
-        }
-        const title = titleText;
 
         // Adiciona fade-out antes de mudar o texto
         $prayerContent.addClass('fade-out');
@@ -577,11 +848,11 @@ $(document).ready(function () {
             words = text.split(/(\s+)/).filter(w => w.trim().length > 0);
             const wrappedText = words.map((word, index) => `<span class="word" data-index="${index}" role="text">${word}</span>`).join(' '); // Adiciona role="text"
             $elements.prayerSlideText.html(wrappedText);
-            $elements.prayerSlideTitle.text(title);
+            $elements.prayerSlideTitle.text(title); // Usa o título construído
 
             // Atualiza navegação e progresso
             updateSlideNavigation();
-            updateSlideProgress(prayerInfo);
+            updateSlideProgress(prayerInfo); // Passa prayerInfo para updateSlideProgress
 
             // Remove fade-out e inicia highlight
             $prayerContent.removeClass('fade-out');
@@ -758,88 +1029,86 @@ $(document).ready(function () {
     // --- Lógica de Construção da Sequência ---
     function buildPrayerSequence() {
         prayerSequence = [];
-        const mysteryPrayers = getMysteryPrayers(state.currentMysteryType);
+        const langKey = state.isLatin ? 'la' : 'pt-br'; // Chave de idioma atual
 
-        // 1. Sinal da Cruz
-        prayerSequence.push({ id: 1, titleId: 1 }); // ID 1: Sinal da Cruz
-        // 2. Intenções
-        prayerSequence.push({ id: 2, titleId: 2 }); // ID 2: Intenções
-        // 3. Creio
-        prayerSequence.push({ id: 3, titleId: 3 }); // ID 3: Creio
-        // 4. Pai Nosso (inicial)
-        prayerSequence.push({ id: 4, titleId: 4 }); // ID 4: Pai Nosso
-        // 5. Ave Maria (3x inicial)
-        prayerSequence.push({ id: 5, titleId: 5, repetitions: 3 }); // ID 5: Ave Maria
-        // 6. Glória (inicial)
-        prayerSequence.push({ id: 6, titleId: 6 }); // ID 6: Glória
-        // 7. Fátima (inicial)
-        prayerSequence.push({ id: 7, titleId: 7 }); // ID 7: Fátima
+        // Verifica se o tipo de mistério selecionado está ativo e existe nos dados carregados
+        if (!state.currentMysteryType ||
+            !state.activeMysteries[state.currentMysteryType] ||
+            !prayerData.mysteries ||
+            !prayerData.mysteries[langKey] ||
+            !prayerData.mysteries[langKey][state.currentMysteryType])
+        {
+            console.error("Tentando construir sequência para um mistério inválido, inativo ou não carregado:", state.currentMysteryType);
+            alert("Por favor, selecione um mistério ativo e válido para iniciar a oração.");
+            return; // Aborta a construção da sequência
+        }
 
-        // 8. Mistérios (5x)
-        for (let i = 0; i < 5; i++) {
-            const mysteryIndex = i * 5; // Cada mistério tem 5 'orações' no JSON (Anúncio, PN, AM, Gl, Fat)
-            if (mysteryPrayers.length > mysteryIndex + 4) { // Verifica se há itens suficientes
-                // Anúncio do Mistério (Ex: ID 8 para o 1º Gozoso)
-                prayerSequence.push({ id: mysteryPrayers[mysteryIndex], titleId: mysteryPrayers[mysteryIndex] });
-                // Pai Nosso do Mistério (Ex: ID 9 para o 1º Gozoso) - Usa texto específico do mistério, mas título genérico do Pai Nosso (ID 4)
-                prayerSequence.push({ id: mysteryPrayers[mysteryIndex + 1], titleId: 4 });
-                // Ave Maria (10x) do Mistério (Ex: ID 10 para o 1º Gozoso) - Usa texto específico, título genérico (ID 5), 10 repetições
-                prayerSequence.push({ id: mysteryPrayers[mysteryIndex + 2], titleId: 5, repetitions: 10 });
-                // Glória do Mistério (Ex: ID 11 para o 1º Gozoso) - Usa texto específico, título genérico (ID 6)
-                prayerSequence.push({ id: mysteryPrayers[mysteryIndex + 3], titleId: 6 });
-                // Fátima do Mistério (Ex: ID 12 para o 1º Gozoso) - Usa texto específico, título genérico (ID 7)
-                prayerSequence.push({ id: mysteryPrayers[mysteryIndex + 4], titleId: 7 });
+        // Helper para adicionar oração comum à sequência
+        const addCommonPrayer = (key, repetitions = 1) => {
+            if (prayerData.common[key]) {
+                prayerSequence.push({
+                    type: 'common', // Indica que é uma oração comum
+                    key: key,       // Chave da oração (ex: 'signum_crucis')
+                    repetitions: repetitions
+                });
             } else {
-                console.warn(`Dados insuficientes para o mistério ${i + 1} do tipo ${state.currentMysteryType}`);
+                console.warn(`Oração comum com chave '${key}' não encontrada.`);
             }
-        }
-
-        // 9. Orações Finais - IDs corrigidos com base na contagem sequencial
-        prayerSequence.push({ id: 33, titleId: 33 }); // ID 33: Agradecimento
-        prayerSequence.push({ id: 34, titleId: 34 }); // ID 34: Salve Rainha
-        // 10. Sinal da Cruz (Final) - ID corrigido, usa texto do ID 35, mas título do Sinal da Cruz (ID 1)
-        prayerSequence.push({ id: 35, titleId: 1 });
-
-        // Define o total de repetições para a primeira oração
-        if (prayerSequence.length > 0) {
-            totalRepetitions = prayerSequence[0].repetitions || 1;
-        }
-
-        // Recalcula total de 'passos' (opcional, para UI se necessário)
-        // state.totalPrayers = prayerSequence.reduce((acc, p) => acc + (p.repetitions || 1), 0);
-    }
-
-    function getMysteryPrayers(type) {
-        // IDs sequenciais gerados em loadPrayerTexts
-        // Início: 1-7
-        // Gozosos: 8-32 (5 mistérios * 5 itens = 25 IDs)
-        // Finais: 33-35
-
-        // Mapeamento dos IDs sequenciais para cada tipo de mistério
-        const mysteriesMap = {
-            // IDs 8 a 32 correspondem aos 5 Mistérios Gozosos (5 itens cada)
-            joyful: [8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32],
-            // --- PLACEHOLDERS ---
-            // Os IDs para os outros mistérios dependerão da ordem em que
-            // forem adicionados ao rosario_textos.json.
-            // Se adicionados após os Gozosos:
-            // Dolorosos: 36-60 ?
-            // Gloriosos: 61-85 ?
-            // Luminosos: 86-110 ?
-            // Por enquanto, usaremos os Gozosos como placeholder.
-            sorrowful: [8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32], // Placeholder
-            glorious: [8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32], // Placeholder
-            luminous: [8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32]  // Placeholder
         };
 
-        if (!mysteriesMap[type]) {
-            console.warn(`Tipo de mistério desconhecido: ${type}. Usando Gozosos como padrão.`);
-            return mysteriesMap.joyful;
+        // Helper para adicionar anúncio de mistério à sequência
+        const addMysteryAnnouncement = (mysteryType, mysteryIndexKey) => {
+            // mysteryIndexKey: 'i', 'ii', 'iii', 'iv', 'v'
+            if (prayerData.mysteries[langKey] &&
+                prayerData.mysteries[langKey][mysteryType] &&
+                prayerData.mysteries[langKey][mysteryType][mysteryIndexKey])
+            {
+                prayerSequence.push({
+                    type: 'mystery_announcement', // Indica que é um anúncio
+                    key: `${mysteryType}_${mysteryIndexKey}`, // Chave única para o anúncio
+                    mysteryType: mysteryType,
+                    mysteryIndex: mysteryIndexKey,
+                    repetitions: 1
+                });
+            } else {
+                console.warn(`Anúncio do mistério ${mysteryType} - ${mysteryIndexKey} não encontrado para o idioma ${langKey}.`);
+            }
+        };
+
+        // 1. Orações Iniciais
+        addCommonPrayer('signum_crucis');
+        addCommonPrayer('intentios'); // Usando a chave do JSON
+        addCommonPrayer('credo_niceno_constantinopolitano'); // Usando a chave do JSON
+        addCommonPrayer('pater_noster');
+        addCommonPrayer('ave_maria', 3); // 3x Ave Maria
+        addCommonPrayer('gloria');
+        addCommonPrayer('oracao_fatima'); // Usando a chave do JSON
+
+        // 2. Cinco Mistérios
+        const mysteryKeys = ['i', 'ii', 'iii', 'iv', 'v'];
+        mysteryKeys.forEach(indexKey => {
+            addMysteryAnnouncement(state.currentMysteryType, indexKey); // Anúncio do Mistério
+            addCommonPrayer('pater_noster'); // Pai Nosso
+            addCommonPrayer('ave_maria', 10); // 10x Ave Maria
+            addCommonPrayer('gloria'); // Glória
+            addCommonPrayer('oracao_fatima'); // Oração de Fátima
+        });
+
+        // 3. Orações Finais
+        addCommonPrayer('salve_rainha'); // Usando a chave do JSON
+        addCommonPrayer('signum_crucis'); // Sinal da Cruz final
+
+        // Define o total de repetições para a primeira oração da sequência
+        if (prayerSequence.length > 0) {
+            totalRepetitions = prayerSequence[0].repetitions || 1;
+        } else {
+            totalRepetitions = 1; // Garante um valor padrão
         }
-        // TODO: Adicionar validação se os dados para o tipo selecionado realmente existem em prayerData
-        //       quando o JSON for atualizado.
-        return mysteriesMap[type];
+
+        console.log("Sequência de oração construída:", prayerSequence); // Log para depuração
     }
+
+    // REMOVIDA: function getMysteryPrayers(type) { ... }
 
     // --- Funções do Modal ---
     function showLanguageModal() {

@@ -1,372 +1,195 @@
 {
   "sections": [
     {
-      "header": "Início",
-      "header_line": 104,
+      "header": "signum_crucis",
       "items": [
         {
-          "portuguese": {
-            "text": "Em nome do Pai, e do Filho, e do Espírito Santo. Amém.",
-            "line": 107
+          "pt-br": {
+            "title": "Sinal da Cruz",
+            "text": "Pelo sinal da Santa Cruz, livrai-nos Deus, nosso Senhor, dos nossos inimigos. Em nome do Pai, e do Filho, e do Espírito Santo."
           },
-          "latin": {
-            "text": "In nomine Patris et Filii et Spiritus Sancti. Amen.",
-            "line": 108
-          }
-        },
-        {
-          "portuguese": {
-            "text": "Divino Jesus, nós Vos oferecemos este terço que vamos rezar, meditando nos mistérios da nossa redenção. Concedei-nos, por intercessão da Virgem Maria, as virtudes necessárias para bem rezá-lo e a graça de ganharmos as indulgências desta santa devoção.",
-            "line": 109
-          },
-          "latin": {
-            "text": "Divine Iesu, hoc Rosarium, quod recitaturi sumus, in mysteriis nostrae redemptionis meditantes, Tibi offerimus. Per intercessionem Virginis Mariae, concede nobis virtutes necessarias ad bene recitandum et gratiam indulgentiarum huius sanctae devotionis lucrandarum.",
-            "line": 110
-          }
-        },
-        {
-          "portuguese": {
-            "text": "Creio em Deus Pai todo-poderoso, Criador do céu e da terra, e em Jesus Cristo, seu único Filho, nosso Senhor, que foi concebido pelo poder do Espírito Santo, nasceu da Virgem Maria, padeceu sob Pôncio Pilatos, foi crucificado, morto e sepultado; desceu à mansão dos mortos, ressuscitou ao terceiro dia, subiu aos céus, está sentado à direita de Deus Pai todo-poderoso, donde há de vir a julgar os vivos e os mortos. Creio no Espírito Santo, na Santa Igreja Católica, na comunhão dos santos, na remissão dos pecados, na ressurreição da carne, na vida eterna. Amém.",
-            "line": 111
-          },
-          "latin": {
-            "text": "Credo in Deum Patrem omnipotentem, Creatorem caeli et terrae. Et in Iesum Christum, Filium eius unicum, Dominum nostrum, qui conceptus est de Spiritu Sancto, natus ex Maria Virgine, passus sub Pontio Pilato, crucifixus, mortuus, et sepultus, descendit ad inferos, tertia die resurrexit a mortuis, ascendit ad caelos, sedet ad dexteram Dei Patris omnipotentis, inde venturus est iudicare vivos et mortuos. Credo in Spiritum Sanctum, sanctam Ecclesiam catholicam, sanctorum communionem, remissionem peccatorum, carnis resurrectionem, vitam aeternam. Amen.",
-            "line": 112
-          }
-        },
-        {
-          "portuguese": {
-            "text": "Pai nosso, que estais nos céus, santificado seja o Vosso nome, venha a nós o Vosso reino, seja feita a Vossa vontade, assim na terra como no céu. O pão nosso de cada dia nos dai hoje, perdoai-nos as nossas ofensas, assim como nós perdoamos a quem nos tem ofendido, e não nos deixeis cair em tentação, mas livrai-nos do mal. Amém.",
-            "line": 113
-          },
-          "latin": {
-            "text": "Pater noster, qui es in caelis, sanctificetur nomen tuum. Adveniat regnum tuum. Fiat voluntas tua, sicut in caelo et in terra. Panem nostrum quotidianum da nobis hodie, et dimitte nobis debita nostra sicut et nos dimittimus debitoribus nostris. Et ne nos inducas in tentationem, sed libera nos a malo. Amen.",
-            "line": 114
-          }
-        },
-        {
-          "portuguese": {
-            "text": "Ave Maria, cheia de graça, o Senhor é convosco, bendita sois vós entre as mulheres, e bendito é o fruto do vosso ventre, Jesus. Santa Maria, Mãe de Deus, rogai por nós pecadores, agora e na hora da nossa morte. Amém.",
-            "line": 115
-          },
-          "latin": {
-            "text": "Ave Maria, gratia plena, Dominus tecum. Benedicta tu in mulieribus, et benedictus fructus ventris tui, Iesus. Sancta Maria, Mater Dei, ora pro nobis peccatoribus, nunc et in hora mortis nostrae. Amen.",
-            "line": 116
-          }
-        },
-        {
-          "portuguese": {
-            "text": "Glória ao Pai, e ao Filho e ao Espírito Santo. Assim como era no princípio, agora e sempre, e por todos os séculos dos séculos. Amém.",
-            "line": 117
-          },
-          "latin": {
-            "text": "Gloria Patri, et Filio, et Spiritui Sancto. Sicut erat in principio, et nunc, et semper, et in saecula saeculorum. Amen.",
-            "line": 118
-          }
-        },
-        {
-          "portuguese": {
-            "text": "Oração de Fátima. Ó meu Jesus, perdoai-nos, livrai-nos do fogo do inferno, levai as almas todas para o céu e socorrei principalmente as que mais precisarem. Amém.",
-            "line": 119
-          },
-          "latin": {
-            "text": "Oratio Fatimae. Domine Iesu, dimitte nobis debita nostra, salva nos ab igne inferiori, perduc in caelum omnes animas, praesertim eas, quae misericordiae tuae maxime indigent.",
-            "line": 120
+          "la": {
+            "title": "Signum Crucis",
+            "text": "Per signum crucis, de inimicis nostris libera nos Deus noster. In nomine Patris et Filii et Spiritus Sancti."
           }
         }
       ]
     },
     {
-      "header": "Mistérios Gozosos",
-      "header_line": 123,
+      "header": "intentios",
       "items": [
         {
-          "portuguese": {
-            "text": "1º Mistério: Anunciação do Anjo a Maria",
-            "line": 128
+          "pt-br": {
+            "title": "Intenções",
+            "text": "Divino Jesus, nós Vos oferecemos este terço que vamos rezar, meditando nos mistérios da nossa redenção. Concedei-nos, por intercessão da Virgem Maria, as virtudes necessárias para bem rezá-lo e a graça de ganharmos as indulgências desta santa devoção."
           },
-          "latin": {
-            "text": "I. Mysterium: Annuntiatio Angelica Mariae",
-            "line": 129
-          }
-        },
-        {
-          "portuguese": {
-            "text": "Pai nosso, que estais nos céus, santificado seja o Vosso nome, venha a nós o Vosso reino, seja feita a Vossa vontade, assim na terra como no céu. O pão nosso de cada dia nos dai hoje, perdoai-nos as nossas ofensas, assim como nós perdoamos a quem nos tem ofendido, e não nos deixeis cair em tentação, mas livrai-nos do mal. Amém.",
-            "line": 130
-          },
-          "latin": {
-            "text": "Pater noster, qui es in caelis, sanctificetur nomen tuum. Adveniat regnum tuum. Fiat voluntas tua, sicut in caelo et in terra. Panem nostrum quotidianum da nobis hodie, et dimitte nobis debita nostra sicut et nos dimittimus debitoribus nostris. Et ne nos inducas in tentationem, sed libera nos a malo. Amen.",
-            "line": 131
-          }
-        },
-        {
-          "portuguese": {
-            "text": "Ave Maria, cheia de graça, o Senhor é convosco, bendita sois vós entre as mulheres, e bendito é o fruto do vosso ventre, Jesus. Santa Maria, Mãe de Deus, rogai por nós pecadores, agora e na hora da nossa morte. Amém.",
-            "line": 132
-          },
-          "latin": {
-            "text": "Ave Maria, gratia plena, Dominus tecum. Benedicta tu in mulieribus, et benedictus fructus ventris tui, Iesus. Sancta Maria, Mater Dei, ora pro nobis peccatoribus, nunc et in hora mortis nostrae. Amen.",
-            "line": 133
-          }
-        },
-        {
-          "portuguese": {
-            "text": "Glória ao Pai, e ao Filho e ao Espírito Santo. Assim como era no princípio, agora e sempre, e por todos os séculos dos séculos. Amém.",
-            "line": 134
-          },
-          "latin": {
-            "text": "Gloria Patri, et Filio, et Spiritui Sancto. Sicut erat in principio, et nunc, et semper, et in saecula saeculorum. Amen.",
-            "line": 135
-          }
-        },
-        {
-          "portuguese": {
-            "text": "Oração de Fátima. Ó meu Jesus, perdoai-nos, livrai-nos do fogo do inferno, levai as almas todas para o Céu, e socorrei principalmente as que mais precisarem da Vossa misericórdia. Amém.",
-            "line": 136
-          },
-          "latin": {
-            "text": "Oratio Fatimae. O píe Jésu, dimítte nóbis débita nóstra, líbera nos ab ígne inférni, pérduc in caelum ómnes ánimas, praesértim íllas, quae máxime indígent misericórdiae túae.",
-            "line": 137
-          }
-        },
-        {
-          "portuguese": {
-            "text": "2º Mistério: Visitação de Maria a Santa Isabel",
-            "line": 142
-          },
-          "latin": {
-            "text": "II. Mysterium: Visitatio Mariae ad Sanctam Elisabeth",
-            "line": 143
-          }
-        },
-        {
-          "portuguese": {
-            "text": "Pai nosso, que estais nos céus, santificado seja o Vosso nome, venha a nós o Vosso reino, seja feita a Vossa vontade, assim na terra como no céu. O pão nosso de cada dia nos dai hoje, perdoai-nos as nossas ofensas, assim como nós perdoamos a quem nos tem ofendido, e não nos deixeis cair em tentação, mas livrai-nos do mal. Amém.",
-            "line": 144
-          },
-          "latin": {
-            "text": "Pater noster, qui es in caelis, sanctificetur nomen tuum. Adveniat regnum tuum. Fiat voluntas tua, sicut in caelo et in terra. Panem nostrum quotidianum da nobis hodie, et dimitte nobis debita nostra sicut et nos dimittimus debitoribus nostris. Et ne nos inducas in tentationem, sed libera nos a malo. Amen.",
-            "line": 145
-          }
-        },
-        {
-          "portuguese": {
-            "text": "Ave Maria, cheia de graça, o Senhor é convosco, bendita sois vós entre as mulheres, e bendito é o fruto do vosso ventre, Jesus. Santa Maria, Mãe de Deus, rogai por nós pecadores, agora e na hora da nossa morte. Amém.",
-            "line": 146
-          },
-          "latin": {
-            "text": "Ave Maria, gratia plena, Dominus tecum. Benedicta tu in mulieribus, et benedictus fructus ventris tui, Iesus. Sancta Maria, Mater Dei, ora pro nobis peccatoribus, nunc et in hora mortis nostrae. Amen.",
-            "line": 147
-          }
-        },
-        {
-          "portuguese": {
-            "text": "Glória ao Pai, e ao Filho e ao Espírito Santo. Assim como era no princípio, agora e sempre, e por todos os séculos dos séculos. Amém.",
-            "line": 148
-          },
-          "latin": {
-            "text": "Gloria Patri, et Filio, et Spiritui Sancto. Sicut erat in principio, et nunc, et semper, et in saecula saeculorum. Amen.",
-            "line": 149
-          }
-        },
-        {
-          "portuguese": {
-            "text": "Oração de Fátima. Ó meu Jesus, perdoai-nos, livrai-nos do fogo do inferno, levai as almas todas para o Céu, e socorrei principalmente as que mais precisarem da Vossa misericórdia. Amém.",
-            "line": 150
-          },
-          "latin": {
-            "text": "Oratio Fatimae. O píe Jésu, dimítte nóbis débita nóstra, líbera nos ab ígne inférni, pérduc in caelum ómnes ánimas, praesértim íllas, quae máxime indígent misericórdiae túae.",
-            "line": 151
-          }
-        },
-        {
-          "portuguese": {
-            "text": "3º Mistério: Nascimento de Jesus em Belém",
-            "line": 156
-          },
-          "latin": {
-            "text": "III. Mysterium: Nativitas Iesu in Bethlehem",
-            "line": 157
-          }
-        },
-        {
-          "portuguese": {
-            "text": "Pai nosso, que estais nos céus, santificado seja o Vosso nome, venha a nós o Vosso reino, seja feita a Vossa vontade, assim na terra como no céu. O pão nosso de cada dia nos dai hoje, perdoai-nos as nossas ofensas, assim como nós perdoamos a quem nos tem ofendido, e não nos deixeis cair em tentação, mas livrai-nos do mal. Amém.",
-            "line": 158
-          },
-          "latin": {
-            "text": "Pater noster, qui es in caelis, sanctificetur nomen tuum. Adveniat regnum tuum. Fiat voluntas tua, sicut in caelo et in terra. Panem nostrum quotidianum da nobis hodie, et dimitte nobis debita nostra sicut et nos dimittimus debitoribus nostris. Et ne nos inducas in tentationem, sed libera nos a malo. Amen.",
-            "line": 159
-          }
-        },
-        {
-          "portuguese": {
-            "text": "Ave Maria, cheia de graça, o Senhor é convosco, bendita sois vós entre as mulheres, e bendito é o fruto do vosso ventre, Jesus. Santa Maria, Mãe de Deus, rogai por nós pecadores, agora e na hora da nossa morte. Amém.",
-            "line": 160
-          },
-          "latin": {
-            "text": "Ave Maria, gratia plena, Dominus tecum. Benedicta tu in mulieribus, et benedictus fructus ventris tui, Iesus. Sancta Maria, Mater Dei, ora pro nobis peccatoribus, nunc et in hora mortis nostrae. Amen.",
-            "line": 161
-          }
-        },
-        {
-          "portuguese": {
-            "text": "Glória ao Pai, e ao Filho e ao Espírito Santo. Assim como era no princípio, agora e sempre, e por todos os séculos dos séculos. Amém.",
-            "line": 162
-          },
-          "latin": {
-            "text": "Gloria Patri, et Filio, et Spiritui Sancto. Sicut erat in principio, et nunc, et semper, et in saecula saeculorum. Amen.",
-            "line": 163
-          }
-        },
-        {
-          "portuguese": {
-            "text": "Oração de Fátima. Ó meu Jesus, perdoai-nos, livrai-nos do fogo do inferno, levai as almas todas para o Céu, e socorrei principalmente as que mais precisarem da Vossa misericórdia. Amém.",
-            "line": 164
-          },
-          "latin": {
-            "text": "Oratio Fatimae. O píe Jésu, dimítte nóbis débita nóstra, líbera nos ab ígne inférni, pérduc in caelum ómnes ánimas, praesértim íllas, quae máxime indígent misericórdiae túae.",
-            "line": 165
-          }
-        },
-        {
-          "portuguese": {
-            "text": "4º Mistério: Apresentação do Menino Jesus no Templo",
-            "line": 170
-          },
-          "latin": {
-            "text": "IV. Mysterium: Praesentatio Pueri Iesu in Templo",
-            "line": 171
-          }
-        },
-        {
-          "portuguese": {
-            "text": "Pai nosso, que estais nos céus, santificado seja o Vosso nome, venha a nós o Vosso reino, seja feita a Vossa vontade, assim na terra como no céu. O pão nosso de cada dia nos dai hoje, perdoai-nos as nossas ofensas, assim como nós perdoamos a quem nos tem ofendido, e não nos deixeis cair em tentação, mas livrai-nos do mal. Amém.",
-            "line": 172
-          },
-          "latin": {
-            "text": "Pater noster, qui es in caelis, sanctificetur nomen tuum. Adveniat regnum tuum. Fiat voluntas tua, sicut in caelo et in terra. Panem nostrum quotidianum da nobis hodie, et dimitte nobis debita nostra sicut et nos dimittimus debitoribus nostris. Et ne nos inducas in tentationem, sed libera nos a malo. Amen.",
-            "line": 173
-          }
-        },
-        {
-          "portuguese": {
-            "text": "Ave Maria, cheia de graça, o Senhor é convosco, bendita sois vós entre as mulheres, e bendito é o fruto do vosso ventre, Jesus. Santa Maria, Mãe de Deus, rogai por nós pecadores, agora e na hora da nossa morte. Amém.",
-            "line": 174
-          },
-          "latin": {
-            "text": "Ave Maria, gratia plena, Dominus tecum. Benedicta tu in mulieribus, et benedictus fructus ventris tui, Iesus. Sancta Maria, Mater Dei, ora pro nobis peccatoribus, nunc et in hora mortis nostrae. Amen.",
-            "line": 175
-          }
-        },
-        {
-          "portuguese": {
-            "text": "Glória ao Pai, e ao Filho e ao Espírito Santo. Assim como era no princípio, agora e sempre, e por todos os séculos dos séculos. Amém.",
-            "line": 176
-          },
-          "latin": {
-            "text": "Gloria Patri, et Filio, et Spiritui Sancto. Sicut erat in principio, et nunc, et semper, et in saecula saeculorum. Amen.",
-            "line": 177
-          }
-        },
-        {
-          "portuguese": {
-            "text": "Oração de Fátima. Ó meu Jesus, perdoai-nos, livrai-nos do fogo do inferno, levai as almas todas para o Céu, e socorrei principalmente as que mais precisarem da Vossa misericórdia. Amém.",
-            "line": 178
-          },
-          "latin": {
-            "text": "Oratio Fatimae. O píe Jésu, dimítte nóbis débita nóstra, líbera nos ab ígne inférni, pérduc in caelum ómnes ánimas, praesértim íllas, quae máxime indígent misericórdiae túae.",
-            "line": 179
-          }
-        },
-        {
-          "portuguese": {
-            "text": "5º Mistério: Perda e encontro do Menino Jesus no Templo",
-            "line": 184
-          },
-          "latin": {
-            "text": "V. Mysterium: Inventio Pueri Iesu in Templo",
-            "line": 185
-          }
-        },
-        {
-          "portuguese": {
-            "text": "Pai nosso, que estais nos céus, santificado seja o Vosso nome, venha a nós o Vosso reino, seja feita a Vossa vontade, assim na terra como no céu. O pão nosso de cada dia nos dai hoje, perdoai-nos as nossas ofensas, assim como nós perdoamos a quem nos tem ofendido, e não nos deixeis cair em tentação, mas livrai-nos do mal. Amém.",
-            "line": 186
-          },
-          "latin": {
-            "text": "Pater noster, qui es in caelis, sanctificetur nomen tuum. Adveniat regnum tuum. Fiat voluntas tua, sicut in caelo et in terra. Panem nostrum quotidianum da nobis hodie, et dimitte nobis debita nostra sicut et nos dimittimus debitoribus nostris. Et ne nos inducas in tentationem, sed libera nos a malo. Amen.",
-            "line": 187
-          }
-        },
-        {
-          "portuguese": {
-            "text": "Ave Maria, cheia de graça, o Senhor é convosco, bendita sois vós entre as mulheres, e bendito é o fruto do vosso ventre, Jesus. Santa Maria, Mãe de Deus, rogai por nós pecadores, agora e na hora da nossa morte. Amém.",
-            "line": 188
-          },
-          "latin": {
-            "text": "Ave Maria, gratia plena, Dominus tecum. Benedicta tu in mulieribus, et benedictus fructus ventris tui, Iesus. Sancta Maria, Mater Dei, ora pro nobis peccatoribus, nunc et in hora mortis nostrae. Amen.",
-            "line": 189
-          }
-        },
-        {
-          "portuguese": {
-            "text": "Glória ao Pai, e ao Filho e ao Espírito Santo. Assim como era no princípio, agora e sempre, e por todos os séculos dos séculos. Amém.",
-            "line": 190
-          },
-          "latin": {
-            "text": "Gloria Patri, et Filio, et Spiritui Sancto. Sicut erat in principio, et nunc, et semper, et in saecula saeculorum. Amen.",
-            "line": 191
-          }
-        },
-        {
-          "portuguese": {
-            "text": "Oração de Fátima. Ó meu Jesus, perdoai-nos, livrai-nos do fogo do inferno, levai as almas todas para o Céu, e socorrei principalmente as que mais precisarem da Vossa misericórdia. Amém.",
-            "line": 192
-          },
-          "latin": {
-            "text": "Oratio Fatimae. O píe Jésu, dimítte nóbis débita nóstra, líbera nos ab ígne inférni, pérduc in caelum ómnes ánimas, praesértim íllas, quae máxime indígent misericórdiae túae.",
-            "line": 193
+          "la": {
+            "title": "Intentio",
+            "text": "Divine Iesu, hoc Rosarium, quod recitaturi sumus, in mysteriis nostrae redemptionis meditantes, Tibi offerimus. Per intercessionem Virginis Mariae, concede nobis virtutes necessarias ad bene recitandum et gratiam indulgentiarum huius sanctae devotionis lucrandarum."
           }
         }
       ]
     },
     {
-      "header": "Orações Finais",
-      "header_line": 197,
+      "header": "credo_niceno_constantinopolitano",
       "items": [
         {
-          "portuguese": {
-            "text": "Infinitas graças vos damos, Soberana Rainha, pelos benefícios que todos os dias recebemos de vossas mãos liberais. Dignai-vos agora e para sempre tomar-nos debaixo do vosso poderoso amparo e, para mais vos obrigar, vos saudamos com uma Salve Rainha.",
-            "line": 200
+          "pt-br": {
+            "title": "Credo Niceno-Constantinopolitano",
+            "text": "Creio em um só Deus, Pai todo-poderoso, Criador do céu e da terra, de todas as coisas visíveis e invisíveis. Creio em um só Senhor, Jesus Cristo, Filho Unigênito de Deus, nascido do Pai antes de todos os séculos. Deus de Deus, Luz da Luz, Deus verdadeiro de Deus verdadeiro, gerado, não criado, consubstancial ao Pai. Por Ele todas as coisas foram feitas. E por nós, homens, e para nossa salvação, desceu dos céus: E se encarnou pelo Espírito Santo, no seio da Virgem Maria, e se fez homem. Também por nós foi crucificado sob Pôncio Pilatos; padeceu e foi sepultado. Ressuscitou ao terceiro dia, conforme as Escrituras; e subiu aos céus, onde está sentado à direita do Pai. E de novo há de vir, em sua glória, para julgar os vivos e os mortos; e o seu reino não terá fim. Creio no Espírito Santo, Senhor que dá a vida, e procede do Pai e do Filho; E com o Pai e o Filho é adorado e glorificado: Ele que falou pelos profetas. Creio na Igreja una, santa, católica e apostólica. Professo um só batismo para a remissão dos pecados. E espero a ressurreição dos mortos; e a vida do mundo que há de vir."
           },
-          "latin": {
-            "text": "Infinitas gratias agimus tibi, Regina nostra, pro beneficiis quae quotidie ex tuis liberalibus manibus percipimus. Dignare nos nunc et in perpetuum sub tuo potenti praesidio suscipere, et ut te magis obligemus, te salutamus Ave Regina.",
-            "line": 201
+          "la": {
+            "title": "Credo Niceno-Constantinopolitano",
+            "text": "Credo in unum Deum, Patrem omnipoténtem, Factórem caeli et terrae, visibílium ómnium et invisibílium. Et in unum Dóminum, Iesum Christum, Fílium Dei Unigénitum, et ex Patre natum ante ómnia saecula. Deum de Deo, lumen de lúmine, Deum verum de Deo vero, génitum, non factum, consubstantiálem Patri. Per quem ómnia facta sunt. Qui propter nos hómines, et propter nostram salútem, descéndit de caelis: Et incarnátus est de Spíritu Sancto, ex María Vírgine, et homo factus est. Crucifíxus étiam pro nobis sub Póntio Piláto; passus et sepúltus est. Et resurréxit tértia die, secúndum Scriptúras; Et ascéndit in caelum, sedet ad déxteram Patris. Et íterum ventúrus est cum glória, iudicáre vivos et mórtuos; cuius regni non erit finis. Et in Spíritum Sanctum, Dóminum et vivificántem, qui ex Patre Filióque procédit; Qui cum Patre et Fílio simul adorátur et conglorificátur: Qui locútus est per prophétas. Et unam, sanctam, cathólicam et apostólicam Ecclésiam. Confíteor unum baptísma in remissiónem peccatorum. Et expecto resurrectionem mortuorum; Et vitam ventúri saeculi."
           }
-        },
+        }
+      ]
+    },
+    {
+      "header": "pater_noster",
+      "items": [
         {
-          "portuguese": {
-            "text": "Salve Rainha, Mãe de misericórdia, vida, doçura e esperança nossa, salve! A vós bradamos, os degredados filhos de Eva; a vós suspiramos, gemendo e chorando neste vale de lágrimas. Eia, pois, advogada nossa, esses vossos olhos misericordiosos a nós volvei, e depois deste desterro mostrai-nos Jesus, bendito fruto do vosso ventre. Ó clemente, ó piedosa, ó doce sempre Virgem Maria. Rogai por nós, Santa Mãe de Deus, para que sejamos dignos das promessas de Cristo. Amém.",
-            "line": 202
+          "pt-br": {
+            "title": "Pai Nosso",
+            "text": "Pai nosso, que estais no céu: santificado seja o vosso nome; venha a nós o vosso reino; seja feita a vossa vontade, assim na terra como no céu. O pão nosso de cada dia nos dai hoje; perdoai-nos as nossas ofensas, assim como nós perdoamos a quem nos tem ofendido; e não nos deixeis cair em tentação; mas livrai-nos do mal."
           },
-          "latin": {
-            "text": "Salve, Regina, Mater misericordiae, vita, dulcedo, et spes nostra, salve. Ad te clamamus exsules filii Hevae. Ad te suspiramus, gementes et flentes in hac lacrimarum valle. Eia, ergo, advocata nostra, illos tuos misericordes oculos ad nos converte. Et Iesum, benedictum fructum ventris tui, nobis post hoc exsilium ostende. O clemens, O pia, O dulcis Virgo Maria. Ora pro nobis, sancta Dei Genetrix. Ut digni efficiamur promissionibus Christi. Amen.",
-            "line": 203
+          "la": {
+            "title": "Pater Noster",
+            "text": "Pater noster, qui es in caelis: sanctificetur nomen tuum; adveniat regnum tuum; fiat voluntas tua, sicut in caelo et in terra. Panem nostrum quotidianum da nobis hodie, et dimitte nobis debita nostra, sicut et nos dimittimus debitoribus nostris; et ne nos inducas in tentationem; sed libera nos a malo."
           }
-        },
+        }
+      ]
+    },
+    {
+      "header": "ave_maria",
+      "items": [
         {
-          "portuguese": {
-            "text": "Em nome do Pai, e do Filho, e do Espírito Santo. Amém.",
-            "line": 204
+          "pt-br": {
+            "title": "Ave Maria",
+            "text": "Ave Maria, cheia de graça, o Senhor é convosco. Bendita sois vós entre as mulheres, e bendito é o fruto do vosso ventre, Jesus. Santa Maria, Mãe de Deus, rogai por nós pecadores, agora e na hora de nossa morte."
           },
-          "latin": {
-            "text": "In nomine Patris et Filii et Spiritus Sancti. Amen.",
-            "line": 205
+          "la": {
+            "title": "Ave Maria",
+            "text": "Ave Maria, gratia plena, Dominus tecum. Benedicta tu in mulieribus, et benedictus fructus ventris tui, Iesus. Sancta Maria, Mater Dei, ora pro nobis peccatoribus, nunc, et in hora mortis nostrae."
+          }
+        }
+      ]
+    },
+    {
+      "header": "gloria",
+      "items": [
+        {
+          "pt-br": {
+            "title": "Glória",
+            "text": "Glória ao Pai, ao Filho, e ao Espírito Santo, como era no princípio, agora e sempre."
+          },
+          "la": {
+            "title": "Glória",
+            "text": "Glória Patri et Fílio et Spirítui Sancto, sicut erat in princípio, et nunc et semper, et in saecula saeculorum."
+          }
+        }
+      ]
+    },
+    {
+      "header": "oracao_fatima",
+      "items": [
+        {
+          "pt-br": {
+            "title": "Oração de Fátima",
+            "text": "Ó meu Jesus, perdoai-nos, livrai-nos do fogo do inferno, levai as almas todas para o céu, e socorrei principalmente as que mais precisarem da vossa misericórdia."
+          },
+          "la": {
+            "title": "Oratio Fatimae",
+            "text": "O píe Jésu, dimítte nóbis débita nóstra, líbera nos ab ígne inférni, pérduc in caelum ómnes ánimas, praesértim íllas, quae máxime indígent misericórdiae túae."
+          }
+        }
+      ]
+    },
+    {
+      "header": "salve_rainha",
+      "items": [
+        {
+          "pt-br": {
+            "title": "Salve Rainha",
+            "text": "Salve, Rainha, Mãe de misericórdia; vida, doçura e esperança nossa, salve! A vós bradamos os degredados filhos de Eva; a vós suspiramos, gemendo e chorando neste vale de lágrimas. Eia, pois, advogada nossa, esses vossos olhos misericordiosos a nós volvei; E depois deste desterro, mostrai-nos Jesus, bendito fruto do vosso ventre. Ó clemente, ó piedosa, ó doce sempre Virgem Maria. Rogai por nós, Santa Mãe de Deus. Para que sejamos dignos das promessas de Cristo."
+          },
+          "la": {
+            "title": "Salve Regina",
+            "text": "Salve Regína, Mater misericórdiæ; Vita, dulcédo, et spes nostra, salve. Ad te Clamámus éxsules fílii Evæ; Ad te suspirámus, geméntes et flentes in hac lacrimárum valle. Eia ergo, advocáta nostra, illos tuos misericórdes óculos ad nos convérte: Et Iesum, benedíctum fructum ventris tui, nobis post hoc exsílium osténde. o clemens, o pia, o dulcis Virgo María. Ora pro nobis, Sancta Dei Génetrix. Ut digni efficiámur promissionibus Christi."
           }
         }
       ]
     }
-  ]
+  ],
+  "mysteries": {
+    "langs": {
+      "pt-br": {
+        "joyful": {
+          "title": "Mistérios Gozosos",
+          "i": "Primeiro mistério: A Anunciação do Anjo à Santíssima Virgem Maria",
+          "ii": "Segundo mistério: A Visitação de Maria à sua prima Santa Isabel",
+          "iii": "Terceiro mistério: O Nascimento de Nosso Senhor Jesus Cristo",
+          "iv": "Quarto mistério: A Apresentação do Menino Jesus no Templo e a Purificação de Maria",
+          "v": "Quinto mistério: O Encontro do Menino Jesus no Templo"
+        },
+        "dolorous": {
+          "title": "Mistérios Dolorosos",
+          "i": "Primeiro mistério: A Oração de Nosso Senhor Jesus Cristo no Horto",
+          "ii": "Segundo mistério: A Flagelação de Nosso Senhor Jesus Cristo",
+          "iii": "Terceiro mistério: A Coroação de espinhos de Nosso Senhor Jesus Cristo",
+          "iv": "Quarto mistério: O Carregamento da Cruz por Nosso Senhor Jesus Cristo",
+          "v": "Quinto mistério: A Crucificação e morte de Nosso Senhor Jesus Cristo"
+        },
+        "glorious": {
+          "title": "Mistérios Gloriosos",
+          "i": "Primeiro mistério: A Ressurreição de Nosso Senhor Jesus Cristo dentre os mortos",
+          "ii": "Segundo mistério: A Ascensão de Nosso Senhor Jesus Cristo aos céus",
+          "iii": "Terceiro mistério: A Vinda do Espírito Santo sobre os discípulos e sobre a Virgem Maria",
+          "iv": "Quarto mistério: A Assunção da Virgem Maria ao céu",
+          "v": "Quinto mistério: A Coroação da Virgem Maria como Rainha do céu"
+        }
+      },
+      "la": {
+        "joyful": {
+          "title": "Mysteria Gaudiosa",
+          "i": "Prímum mystérium est: Annuntiátio Beátæ Maríæ Vírginis",
+          "ii": "Secúndum mystérium est: Visitátio Beátæ Maríæ Vírginis ad Sánctam Elízabethem",
+          "iii": "Tértium mystérium est: Natívitas Dómini nostri Jésu Christi",
+          "iv": "Quartum mystérium est: Praesentátio Puéri Jésu in Templo et Purificátio Beátæ Maríæ Vírginis",
+          "v": "Quintum mystérium est: Invéntio Puéri Jésu in Templo"
+        },
+        "dolorous": {
+          "title": "Mysteria Dolorosa",
+          "i": "Prímum mystérium est: Orátio in horto Dómini nostri Jésu Christi",
+          "ii": "Secúndum mystérium est: Flagellátio Dómini nostri Jésu Christi",
+          "iii": "Tertium mystérium est: Coronátio spinis Dómini nostri Jésu Christi",
+          "iv": "Quartum mystérium est: Bajulátio Crúcis Dómini nostri Jésu Christi",
+          "v": "Quintum mystérium est: Crucifíxio et mors Dómini nostri Jésu Christi"
+        },
+        "glorious": {
+          "title": "Mysteria Gloriosa",
+          "i": "Prímum mystérium est: Resurréctio Dómini nostri Jésu Christi a mórtuis",
+          "ii": "Secúndum mystérium est: Ascénsio in cáelis Dómini nostri Jésu Christi",
+          "iii": "Tértium mystérium est: Advéntus Spíritus Sancti in discípulos et Beátæ Maríæ Vírginis",
+          "iv": "Quartum mystérium est: Assúmptio Beátæ Maríæ Vírginis ad cáelum",
+          "v": "Quintum mystérium est: Coronátio Beátæ Maríæ Vírginis in cáelis"
+        }
+      }
+    },
+    "dates": {
+      "joyful": [
+        "monday",
+        "thursday",
+        "saturday"
+      ],
+      "dolorous": [
+        "tuesday",
+        "friday"
+      ],
+      "glorious": [
+        "wednesday",
+        "sunday"
+      ]
+    }
+  }
 }

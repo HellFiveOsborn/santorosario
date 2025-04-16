@@ -937,6 +937,124 @@ body {
     }
 }
 
+/* Mystery Selection Controls Container */
+#mysterySelectionControls {
+    /* Estilos para o container do mistério do dia */
+    background-color: rgba(255, 255, 255, 0.6); /* Fundo levemente branco */
+    padding: 1rem 1.5rem;
+    border-radius: 0.75rem;
+    border: 1px solid rgba(209, 213, 219, 0.7); /* Borda sutil */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    max-width: 500px; /* Limita a largura */
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#mysterySelectionControls:hover {
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.12);
+}
+
+/* Title */
+#mysterySelectionControls h3 {
+    width: 100%;
+    text-align: center;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #4f46e5;
+    letter-spacing: 0.1em;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    position: relative;
+    padding-bottom: 0.5rem;
+}
+
+#mysterySelectionControls h3::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 150px;
+    height: 2px;
+    background: linear-gradient(90deg, rgba(79, 70, 229, 0) 0%, #4f46e5 50%, rgba(79, 70, 229, 0) 100%);
+}
+
+/* Checkbox Container */
+#mysterySelectionControls > div {
+    display: flex;
+    align-items: center;
+    margin: 0.5rem 0;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+#mysterySelectionControls > div:hover {
+    background-color: rgba(79, 70, 229, 0.05);
+}
+
+/* Custom Checkbox */
+.mystery-checkbox {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #d1d5db;
+    border-radius: 6px;
+    outline: none;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.2s ease;
+}
+
+.mystery-checkbox:checked {
+    background-color: #4f46e5;
+    border-color: #4f46e5;
+}
+
+.mystery-checkbox:checked::after {
+    content: '';
+    position: absolute;
+    left: 2px;
+    top: -2px;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+.mystery-checkbox:focus {
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
+}
+
+/* Labels */
+#mysterySelectionControls label {
+    margin-left: 0.75rem;
+    font-size: 0.9rem;
+    color: #374151;
+    cursor: pointer;
+    transition: color 0.2s ease;
+    font-weight: 500;
+}
+
+#mysterySelectionControls > div:hover label {
+    color: #4f46e5;
+}
+
+/* Responsive adjustments */
+@media (max-width: 500px) {
+    #mysterySelectionControls {
+        padding: 1rem;
+    }
+    
+    #mysterySelectionControls > div {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
 /* --- Estilos para Mistério do Dia e Calendário --- */
 
 #dailyMysteryContainer {
@@ -954,6 +1072,18 @@ body {
 #dailyMysteryContainer h3 {
     /* Estilo para o título "Mistério do Dia" */
     color: #4338ca; /* Tom de índigo mais escuro */
+    position: relative;
+}
+
+#dailyMysteryContainer h3::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 150px;
+    height: 2px;
+    background: linear-gradient(90deg, rgba(79, 70, 229, 0) 0%, #4f46e5 50%, rgba(79, 70, 229, 0) 100%);
 }
 
 #dailyMysteryText {
