@@ -1,0 +1,1027 @@
+:root {
+    --prayer-font-size: 1.6rem;
+    /* Variável CSS para tamanho da fonte */
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    scroll-behavior: smooth;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes highlightWord {
+    0% {
+        background-color: rgba(79, 70, 229, 0.2);
+    }
+
+    100% {
+        background-color: transparent;
+    }
+}
+
+.fade-in {
+    animation: fadeIn 0.6s ease-out forwards;
+}
+
+.prayer-item { /* Estilos para a lista original (agora escondida) */
+    opacity: 0;
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.prayer-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+}
+
+.latin-text {
+    font-style: italic;
+    color: #4b5563;
+    font-size: 0.9em;
+    margin-left: 1.5rem;
+    margin-top: 0.25rem;
+    display: none;
+    line-height: 1.4;
+}
+
+.portuguese-text {
+    display: block;
+}
+
+.language-toggle {
+    transition: all 0.3s ease;
+}
+
+.active-language {
+    background-color: #4f46e5;
+    color: white;
+}
+
+.prayer-counter {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #4f46e5;
+}
+
+.current-prayer {
+    background-color: #e0e7ff;
+    border-left: 4px solid #4f46e5;
+}
+
+.mystery-selector {
+    transition: all 0.3s ease;
+}
+
+.mystery-selector:hover {
+    transform: scale(1.05);
+}
+
+.language-modal { /* Estilos para o modal de seleção de idioma */
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.language-modal.active {
+    opacity: 1;
+    pointer-events: all;
+}
+
+.language-modal-content {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 1rem;
+    max-width: 500px;
+    width: 90%;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+    transform: translateY(20px);
+    transition: transform 0.3s ease;
+}
+
+.language-modal.active .language-modal-content {
+    transform: translateY(0);
+}
+
+.prayer-slide { /* Estilos para o slide de orações */
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(243, 244, 246, 0.97);
+    /* Fundo ligeiramente opaco */
+    z-index: 900;
+    display: flex;
+    /* Usar flex desde o início para transição */
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 2rem 1rem;
+    text-align: center;
+    opacity: 0;
+    /* Começa invisível */
+    visibility: hidden;
+    /* Começa escondido */
+    transition: opacity 0.5s ease, visibility 0s linear 0.5s;
+    /* Transição de fade */
+    overflow-y: auto;
+    /* Permite rolagem vertical */
+}
+
+.prayer-slide.active {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.5s ease, visibility 0s linear 0s;
+}
+
+.prayer-content { /* Container para o texto para aplicar transição */
+    opacity: 1;
+    transition: opacity 0.4s ease-in-out;
+    flex: 1;
+    width: 100%;
+    max-width: 800px;
+    overflow-y: auto;
+    margin-bottom: 1rem;
+    padding: 0 0.5rem;
+}
+
+.prayer-content.fade-out {
+    opacity: 0;
+}
+
+.prayer-title {
+    font-family: 'Playfair Display', serif; /* Nova fonte */
+    font-weight: 700; /* Peso da fonte */
+    color: #3730a3; /* Tom de índigo mais escuro */
+    padding-bottom: 8px; /* Espaço para o sublinhado */
+    border-bottom: 2px solid #4f46e5; /* Sublinhado roxo/índigo */
+    display: inline-block; /* Sublinhado apenas sob o texto */
+    margin-top: 6rem; /* Espaçamento acima do título para não ser coberto pela barra de progresso */
+    margin-bottom: 1rem; /* Espaçamento abaixo do título */
+}
+
+.prayer-text {
+    font-size: var(--prayer-font-size);
+    /* Usa a variável CSS */
+    line-height: 1.7;
+    max-width: 800px;
+    margin: 1rem auto 7rem auto;
+    /* Mais espaço abaixo para os controles */
+    color: #1f2937;
+    /* Cor mais escura para contraste */
+    transition: font-size 0.3s ease;
+    /* Transição suave para tamanho da fonte */
+    overflow-y: visible;
+    /* Garante que o texto não seja cortado */
+    padding-bottom: 3rem;
+    /* Espaço adicional no final para evitar que o texto seja cortado pelos controles */
+}
+
+.prayer-text span {
+    display: inline-block;
+    padding: 0 2px;
+    border-radius: 3px;
+    transition: background-color 0.3s ease;
+}
+
+.prayer-text span.highlight {
+    /* background-color: rgba(99, 102, 241, 0.2); /* Highlight suave */
+    animation: highlightWord 1.5s ease;
+    /* Animação mais sutil */
+    background-color: transparent;
+    /* Remove fundo estático */
+    color: #4f46e5;
+    /* Cor do texto destacado */
+    font-weight: 600;
+    /* Negrito leve */
+    scroll-margin-top: 100px;
+    scroll-margin-bottom: 150px;
+    /* Margem de rolagem para garantir que a palavra destacada fique visível */
+}
+
+.prayer-navigation {
+    position: fixed;
+    bottom: 1rem;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    /* Espaço entre botões */
+    z-index: 930;
+    /* Garante que fique sobre o conteúdo e acima dos outros controles */
+}
+
+.prayer-navigation button {
+    /* Estilo base para botões de navegação */
+    background-color: rgba(255, 255, 255, 0.8);
+    border: 1px solid #d1d5db;
+    color: #374151;
+    width: 50px;
+    /* Tamanho fixo */
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.2rem;
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    transition: all 0.2s ease;
+}
+
+.prayer-navigation button:hover:not(:disabled) {
+    background-color: #fff;
+    border-color: #a5b4fc;
+    color: #4f46e5;
+    transform: scale(1.05);
+}
+
+.prayer-navigation button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+#resetHighlightBtn {
+    /* Estilos específicos para o botão de reset, se necessário. */
+    /* Pode herdar a maioria dos estilos de .control-btn ou .prayer-navigation button */
+    /* Exemplo: Garantir tamanho consistente se usar .control-btn */
+     width: 44px;
+     height: 44px;
+     font-size: 1rem; /* Ajustar tamanho do ícone se necessário */
+}
+
+.prayer-progress {
+    position: fixed;
+    top: 1rem;
+    left: 50%;
+    /* Centraliza */
+    transform: translateX(-50%);
+    /* Centraliza */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.75rem;
+    /* Aumenta espaço */
+    background-color: rgba(255, 255, 255, 0.8);
+    /* Fundo para destaque */
+    padding: 0.5rem 1rem;
+    border-radius: 1rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    z-index: 910;
+}
+
+.prayer-progress-bar {
+    height: 6px;
+    /* Barra mais espessa */
+    background-color: #e0e7ff;
+    border-radius: 3px;
+    width: 150px;
+    /* Reduz um pouco */
+    overflow: hidden;
+}
+
+.prayer-progress-fill {
+    height: 100%;
+    background-color: #4f46e5;
+    width: 0%;
+    transition: width 0.4s ease;
+    /* Transição mais suave */
+    border-radius: 3px;
+}
+
+.repetition-counter {
+    background-color: #4f46e5;
+    color: white;
+    font-weight: 600;
+    /* Mais destaque */
+    padding: 0.3rem 0.8rem;
+    border-radius: 1rem;
+    font-size: 0.8rem;
+    /* Ajusta tamanho */
+}
+
+.close-prayer-slide {
+    position: absolute;
+    top: 1.5rem;
+    /* Ajusta posição */
+    right: 1.5rem;
+    background-color: rgba(229, 231, 235, 0.8);
+    /* Fundo semi-transparente */
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    z-index: 910;
+    color: #4b5563;
+}
+
+.close-prayer-slide:hover {
+    background-color: #e5e7eb;
+    transform: scale(1.1);
+}
+
+/* Controles Adicionais no Slide */
+/* Versão mobile (padrão) */
+.prayer-controls-container {
+    position: fixed;
+    bottom: 5rem; /* Aumentado para dar mais espaço para os botões de navegação */
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    gap: 0.75rem;
+    z-index: 920;
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 0.75rem 0.5rem;
+    border-radius: 1rem 1rem 0 0;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+    flex-wrap: wrap; /* Permite quebra de linha em telas muito pequenas */
+}
+
+.prayer-controls-left {
+    display: flex;
+    gap: 0.75rem;
+    z-index: 920;
+    justify-content: center;
+}
+
+.prayer-controls-right {
+    display: flex;
+    gap: 0.75rem;
+    z-index: 920;
+    justify-content: center;
+}
+
+/* Versão desktop */
+@media (min-width: 768px) {
+    /* Esconde o container mobile no desktop */
+    .prayer-controls-container {
+        display: none;
+    }
+
+    /* Mostra e posiciona os controles laterais fixos no desktop */
+    .prayer-controls-left {
+        position: fixed;
+        left: 1.5rem;
+        top: 50%;
+        transform: translateY(-50%);
+        display: flex; /* Força visibilidade */
+        flex-direction: column;
+        gap: 0.75rem; /* Adiciona espaçamento */
+        z-index: 920; /* Garante que fiquem acima */
+    }
+
+    .prayer-controls-right {
+        position: fixed;
+        right: 1.5rem;
+        top: 50%;
+        transform: translateY(-50%);
+        display: flex; /* Força visibilidade */
+        flex-direction: column;
+        align-items: center;
+        gap: 0.75rem; /* Adiciona espaçamento */
+        z-index: 920; /* Garante que fiquem acima */
+    }
+    
+    /* Garante que o botão de reset no desktop seja visível */
+    #resetHighlightBtnContainer {
+        display: none !important; /* Esconde o container mobile no desktop */
+    }
+}
+
+/* Versão mobile */
+@media (max-width: 767px) {
+    /* Garante que os controles dentro do container mobile fiquem em linha */
+    .prayer-controls-left,
+    .prayer-controls-right {
+        position: static;
+        transform: none;
+        flex-direction: row; /* Garante layout horizontal no container mobile */
+        z-index: auto;
+    }
+
+    /* Esconde os controles laterais fixos (definidos para desktop) no mobile */
+    .prayer-controls-left[style*="position: fixed"],
+    .prayer-controls-right[style*="position: fixed"] {
+         display: none !important; /* Usa !important para garantir a sobreposição */
+    }
+    
+    /* Garante que o botão de reset no mobile seja visível */
+    #resetHighlightBtnContainer {
+        display: flex !important;
+        justify-content: center;
+    }
+
+    .prayer-controls-left.desktop,
+    .prayer-controls-right.desktop {
+        display: none;
+    }
+
+    #resetHighlightBtnMobile {
+        display: none;
+    }
+}
+
+/* Botão de finalizar oração */
+.finish-prayer-btn {
+    background-color: #10b981; /* Verde */
+    color: white;
+    border: none;
+    border-radius: 50% !important;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.2rem;
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    transition: all 0.2s ease;
+    position: relative;
+}
+
+.finish-prayer-btn:hover {
+    background-color: #059669;
+    transform: scale(1.05);
+}
+
+.control-btn { /* Estilo base para botões de controle circulares */
+    background-color: rgba(255, 255, 255, 0.8);
+    border: 1px solid #d1d5db;
+    color: #374151;
+    width: 44px;
+    /* Tamanho padrão */
+    height: 44px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1rem;
+    /* Tamanho do ícone */
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    transition: all 0.2s ease;
+    cursor: pointer;
+    position: relative;
+    /* Para tooltip */
+}
+
+/* Tooltip base */
+.control-btn::after {
+    content: attr(title);
+    position: absolute;
+    background-color: rgba(17, 24, 39, 0.85);
+    /* Cor de fundo do tooltip */
+    color: white;
+    padding: 0.3rem 0.6rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease 0.1s, visibility 0s linear 0.3s;
+    /* Delay na transição */
+    pointer-events: none;
+    /* Impede interação com o tooltip */
+    z-index: 950;
+    /* Garante que tooltip fique sobre outros elementos */
+}
+
+.prayer-controls-left .control-btn::after {
+    /* Tooltip para botões da esquerda */
+    left: calc(100% + 8px);
+    /* Posiciona à direita com gap */
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.prayer-controls-right .control-btn::after {
+    /* Tooltip para botões da direita */
+    right: calc(100% + 8px);
+    /* Posiciona à esquerda com gap */
+    top: 50%;
+    transform: translateY(-50%);
+    left: auto;
+    /* Sobrescreve o left */
+}
+
+.control-btn:hover::after {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.2s ease 0.1s, visibility 0s linear 0s;
+    /* Mostra tooltip */
+}
+
+.control-btn:hover {
+    background-color: #fff;
+    border-color: #a5b4fc;
+    color: #4f46e5;
+    transform: scale(1.1);
+}
+
+.control-btn.active {
+    /* Estilo para botão ativo (ex: autoplay) */
+    background-color: #e0e7ff;
+    border-color: #4f46e5;
+    color: #4f46e5;
+}
+
+.speed-control-container { /* Botão de Velocidade Expansível */
+    position: relative;
+    /* Necessário para posicionar as opções */
+}
+
+.speed-options {
+    position: absolute;
+    /* Posicionamento adaptativo para mobile/desktop */
+    left: 50%;
+    transform: translateX(-50%) scale(0.9);
+    /* Começa ligeiramente menor */
+    display: flex;
+    flex-direction: row;
+    /* Horizontal em mobile */
+    gap: 0.5rem;
+    background-color: rgba(255, 255, 255, 0.95);
+    padding: 0.5rem;
+    border-radius: 1rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease, visibility 0s linear 0.2s, transform 0.2s ease;
+    transform-origin: center;
+    z-index: 930;
+    /* Acima de outros controles */
+}
+
+/* Versão mobile (padrão) */
+.speed-options {
+    bottom: calc(100% + 0.5rem);
+}
+
+/* Versão desktop */
+@media (min-width: 768px) {
+    .speed-options {
+        flex-direction: column-reverse;
+        /* Vertical em desktop */
+    }
+}
+
+.speed-control-container.open .speed-options {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.2s ease, visibility 0s linear 0s, transform 0.2s ease;
+    transform: translateX(-50%) scale(1);
+    /* Expande para tamanho normal */
+}
+
+.speed-option-btn {
+    background-color: #f3f4f6;
+    border: 1px solid #e5e7eb;
+    color: #374151;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 0.8rem;
+    /* Fonte menor para opções */
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.speed-option-btn:hover {
+    background-color: #e0e7ff;
+    border-color: #a5b4fc;
+    color: #4f46e5;
+}
+
+.speed-option-btn.selected {
+    background-color: #4f46e5;
+    border-color: #4f46e5;
+    color: white;
+}
+
+/* Estilos para o modal de conclusão */
+.completion-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+    /* Fundo mais escuro */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1100;
+    /* Acima do slide de oração */
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.4s ease, visibility 0s linear 0.4s;
+}
+
+/* Função para rolagem automática para seguir a palavra destacada */
+@keyframes scrollToHighlight {
+    from {
+        transform: translateY(0);
+    }
+    to {
+        transform: translateY(var(--scroll-offset, 0));
+    }
+}
+
+.prayer-text span.highlight {
+    scroll-margin-top: 40vh; /* Centraliza a palavra na tela durante a rolagem */
+    scroll-margin-bottom: 40vh;
+}
+
+.completion-modal.active {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.4s ease, visibility 0s linear 0s;
+}
+
+/* Media queries para responsividade */
+@media (max-width: 768px) {
+    .prayer-slide {
+        padding: 1rem 0.5rem;
+        justify-content: flex-start;
+    }
+
+    .prayer-title {
+        font-size: 1.5rem;
+        margin-top: 2.5rem;
+    }
+
+    .prayer-text {
+        font-size: calc(var(--prayer-font-size) * 0.9);
+        margin: 0.5rem auto;
+    }
+
+    .prayer-progress {
+        top: 0.5rem;
+    }
+
+    .prayer-progress-bar {
+        width: 100px;
+    }
+
+    .close-prayer-slide {
+        top: 0.5rem;
+        right: 0.5rem;
+        width: 36px;
+        height: 36px;
+    }
+
+    .control-btn {
+        width: 40px;
+        height: 40px;
+    }
+
+    .prayer-navigation button {
+        width: 44px;
+        height: 44px;
+    }
+}
+
+/* Para telas muito pequenas */
+@media (max-width: 480px) {
+    .prayer-controls-container {
+        gap: 0.5rem;
+        padding: 0.5rem 0.25rem;
+        flex-direction: row;
+        justify-content: center;
+    }
+
+    .prayer-controls-left,
+    .prayer-controls-right {
+        display: flex;
+        flex-direction: row;
+        gap: 0.5rem;
+    }
+
+    .control-btn {
+        width: 36px;
+        height: 36px;
+        font-size: 0.9rem;
+    }
+
+    .prayer-navigation button {
+        width: 40px;
+        height: 40px;
+    }
+
+    .prayer-title {
+        font-size: 1.25rem;
+    }
+
+    .prayer-text {
+        margin-bottom: 9rem; /* Ainda mais espaço para os controles em telas pequenas */
+    }
+}
+
+.completion-modal-content {
+    background-color: white;
+    padding: 2.5rem;
+    /* Mais padding */
+    border-radius: 1rem;
+    max-width: 450px;
+    width: 90%;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    text-align: center;
+    transform: scale(0.95);
+    /* Efeito de zoom inicial */
+    transition: transform 0.4s ease;
+}
+
+.completion-modal.active .completion-modal-content {
+    transform: scale(1);
+}
+
+.completion-modal-icon {
+    font-size: 3.5rem;
+    /* Ícone maior */
+    color: #10b981;
+    /* Verde esmeralda */
+    margin-bottom: 1.5rem;
+}
+
+.completion-modal-title {
+    font-size: 1.75rem;
+    /* Título maior */
+    font-weight: 600;
+    color: #1f2937;
+    margin-bottom: 0.75rem;
+}
+
+.completion-modal-text {
+    font-size: 1rem;
+    color: #4b5563;
+    margin-bottom: 2rem;
+}
+
+.completion-modal-close-btn {
+    background-color: #4f46e5;
+    color: white;
+    font-weight: 600;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.completion-modal-close-btn:hover {
+    background-color: #4338ca;
+}
+
+/* Estilos para o botão de conclusão */
+.finish-prayer-btn {
+    position: fixed;
+    bottom: 10rem;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #10b981; /* Verde */
+    color: white;
+    font-weight: 600;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    z-index: 940;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    opacity: 0;
+    visibility: hidden;
+}
+
+.finish-prayer-btn.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.finish-prayer-btn.hidden {
+    opacity: 0;
+    visibility: hidden;
+}
+
+.finish-prayer-btn:hover {
+    background-color: #059669; /* Verde mais escuro */
+    transform: translateX(-50%) scale(1.05);
+}
+
+/* Ajuste para desktop */
+@media (min-width: 768px) {
+    .finish-prayer-btn {
+        bottom: 6rem; /* Posição mais baixa em desktop */
+        padding: 0.75rem 2rem; /* Botão um pouco maior */
+        font-size: 1.1rem;
+    }
+}
+
+/* Media queries para responsividade */
+@media (max-width: 767px) {
+    .prayer-slide {
+        padding: 1rem 0.5rem;
+    }
+
+    .prayer-title {
+        font-size: 1.2rem;
+        margin-bottom: 0.5rem;
+        margin-top: 3rem; /* Espaço para o botão de fechar e progresso */
+    }
+
+    .prayer-text {
+        font-size: calc(var(--prayer-font-size) * 0.9);
+        margin: 0.5rem auto 8rem auto; /* Aumentado para acomodar os controles */
+    }
+
+    .prayer-progress {
+        top: 0.5rem;
+        padding: 0.3rem 0.6rem;
+    }
+
+    .prayer-progress-bar {
+        width: 100px;
+    }
+
+    .control-btn {
+        width: 40px;
+        height: 40px;
+    }
+
+    .prayer-navigation button {
+        width: 45px;
+        height: 45px;
+    }
+
+    .close-prayer-slide {
+        top: 0.5rem;
+        right: 0.5rem;
+        width: 36px;
+        height: 36px;
+    }
+}
+
+/* Estilos para rolagem automática */
+.prayer-content {
+    overflow-y: auto;
+    max-height: 70vh;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(79, 70, 229, 0.3) transparent;
+    scroll-behavior: smooth; /* Garante rolagem suave */
+}
+
+.prayer-content::-webkit-scrollbar {
+    width: 6px;
+}
+
+.prayer-content::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.prayer-content::-webkit-scrollbar-thumb {
+    background-color: rgba(79, 70, 229, 0.3);
+    border-radius: 3px;
+}
+
+/* Ajustes para garantir que a palavra destacada seja visível */
+.prayer-text span.highlight {
+    scroll-margin-top: 120px; /* Aumentado para garantir mais espaço acima */
+    scroll-margin-bottom: 180px; /* Aumentado para garantir mais espaço abaixo */
+}
+
+/* Ajustes para telas muito pequenas em modo retrato */
+@media (max-width: 380px) and (orientation: portrait) {
+    .prayer-controls-container {
+        padding: 0.4rem 0.2rem;
+    }
+
+    .control-btn {
+        width: 34px;
+        height: 34px;
+    }
+
+    .prayer-navigation {
+        bottom: 0.75rem;
+    }
+
+    .prayer-navigation button {
+        width: 38px;
+        height: 38px;
+    }
+}
+
+/* --- Estilos para Mistério do Dia e Calendário --- */
+
+#dailyMysteryContainer {
+    /* Estilos para o container do mistério do dia */
+    background-color: rgba(255, 255, 255, 0.6); /* Fundo levemente branco */
+    padding: 1rem 1.5rem;
+    border-radius: 0.75rem;
+    border: 1px solid rgba(209, 213, 219, 0.7); /* Borda sutil */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    max-width: 500px; /* Limita a largura */
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#dailyMysteryContainer h3 {
+    /* Estilo para o título "Mistério do Dia" */
+    color: #4338ca; /* Tom de índigo mais escuro */
+}
+
+#dailyMysteryText {
+    /* Estilo para o texto do mistério */
+    font-weight: 500;
+}
+
+#calendarContainer {
+    /* Estilos para o container do calendário */
+    background-color: rgba(255, 255, 255, 0.7); /* Fundo levemente branco */
+    padding: 1.5rem;
+    border-radius: 0.75rem;
+    border: 1px solid rgba(209, 213, 219, 0.7); /* Borda sutil */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.07);
+    max-width: 500px; /* Limita a largura */
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#calendarContainer .grid > div {
+    /* Estilo base para todas as células do grid (nomes dos dias e dias) */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 36px; /* Altura mínima para consistência */
+}
+
+#calendarContainer .grid > div[data-mystery] {
+    /* Estilo específico para as células dos dias com mistério */
+    transition: transform 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+#calendarContainer .grid > div[data-mystery]:hover {
+    /* Efeito hover sutil nos dias */
+    transform: scale(1.05);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    z-index: 10; /* Garante que fique sobre outros dias */
+    position: relative; /* Necessário para z-index */
+}
+
+/* Classes de cor (já aplicadas via JS, mas definidas aqui para referência) */
+.bg-blue-100 { background-color: #DBEAFE; }
+.text-blue-800 { color: #1E40AF; }
+.border-blue-300 { border-color: #93C5FD; }
+
+.bg-red-100 { background-color: #FEE2E2; }
+.text-red-800 { color: #991B1B; }
+.border-red-300 { border-color: #FCA5A5; }
+
+.bg-yellow-100 { background-color: #FEF9C3; }
+.text-yellow-800 { color: #854D0E; }
+.border-yellow-300 { border-color: #FDE047; }
+
+.bg-purple-100 { background-color: #EDE9FE; }
+.text-purple-800 { color: #5B21B6; }
+.border-purple-300 { border-color: #C4B5FD; }
+
+.bg-gray-100 { background-color: #F3F4F6; }
+.text-gray-800 { color: #1F2937; }
+.border-gray-300 { border-color: #D1D5DB; }
+
+/* Estilo para o destaque do dia atual (aplicado via JS) */
+#calendarContainer .ring-2 {
+    --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
+    --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);
+    box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
+}
+#calendarContainer .ring-indigo-500 {
+    --tw-ring-opacity: 1;
+    --tw-ring-color: rgb(99 102 241 / var(--tw-ring-opacity));
+}

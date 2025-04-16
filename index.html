@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Mobile Browser Navbar Color -->
+    <meta name="theme-color" content="#eeeae0">
+    <title>Santo Rosário - Guia de Oração</title>
+    <!-- Favicon -->
+    <link rel="icon" href="https://i.ibb.co/ZvMK0WX/rosario-icon.png" type="image/png">
+    <!-- Meta tags para SEO e compartilhamento -->
+    <meta name="description" content="Guia completo para rezar o Santo Rosário em Português e Latim">
+    <meta property="og:title" content="Santo Rosário - Guia de Oração">
+    <meta property="og:description" content="Guia completo para rezar o Santo Rosário em Português e Latim">
+    <meta property="og:image" content="https://i.ibb.co/jkkwsbTg/santo-rosario.png">
+    <meta property="og:url" content="https://santo-rosario.com">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Santo Rosário - Guia de Oração">
+    <meta name="twitter:description" content="Guia completo para rezar o Santo Rosário em Português e Latim">
+    <meta name="twitter:image" content="https://i.ibb.co/jkkwsbTg/santo-rosario.png">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap" rel="stylesheet"> <!-- Fonte Playfair Display adicionada -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="./main.css">
+</head>
+<body class="bg-gradient-to-br from-indigo-50 via-blue-50 to-purple-100 text-gray-900 antialiased">
+    <!-- Modal de seleção de idioma -->
+    <div id="languageModal" class="language-modal">
+        <div class="language-modal-content">
+            <h2 class="text-2xl font-bold text-indigo-800 mb-4">Selecione seu idioma preferido</h2>
+            <div class="space-y-4">
+                <button id="modalPortugueseBtn" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-4 rounded-lg transition-all">
+                    Português
+                </button>
+                <button id="modalLatinBtn" class="w-full bg-white hover:bg-gray-100 text-gray-800 font-bold py-3 px-4 border border-gray-300 rounded-lg transition-all">
+                    Latim
+                </button>
+                <div class="flex items-center mt-4">
+                    <input type="checkbox" id="savePreference" class="mr-2">
+                    <label for="savePreference" class="text-gray-700">Salvar minha preferência</label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Conclusão -->
+    <div id="completionModal" class="completion-modal">
+        <div class="completion-modal-content">
+            <div class="completion-modal-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h2 class="completion-modal-title">Rosário Concluído!</h2>
+            <p class="completion-modal-text">Que a paz de Cristo esteja com você. Sua oração foi completada com sucesso.</p>
+            <button id="closeCompletionModalBtn" class="completion-modal-close-btn">Fechar</button>
+        </div>
+    </div>
+
+    <div class="container mx-auto px-4 py-10 max-w-4xl">
+        <header class="text-center mb-12 fade-in">
+            <i class="fas fa-cross text-5xl text-indigo-600 mb-4"></i>
+            <h1 class="text-5xl font-bold text-indigo-800 mb-3">Santo Rosário</h1>
+            <p class="text-xl text-gray-700">Guia Completo para a Oração Mariana</p>
+            <img src="https://i.ibb.co/jkkwsbTg/santo-rosario.png" alt="Imagem ilustrativa do Rosário" class="mt-6 rounded-xl shadow-lg mx-auto border-4 border-white" onerror="this.onerror=null; this.src='https://placehold.co/700x250/E0E7FF/4338CA?text=Imagem+Indisponível'">
+
+            <!-- Controles de oração -->
+            <div class="mt-8 flex flex-col sm:flex-row justify-center items-center gap-4">
+                <button id="startPrayer" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-full shadow-lg transition-all transform hover:scale-105">
+                    <i class="fas fa-play mr-2"></i>Iniciar Oração
+                </button>
+
+                <div class="flex items-center bg-white rounded-full shadow-md overflow-hidden">
+                    <button id="portugueseBtn" class="language-toggle active-language px-4 py-2 font-medium">
+                        <i class="fas fa-language mr-1"></i> Português
+                    </button>
+                    <button id="latinBtn" class="language-toggle px-4 py-2 font-medium">
+                        <i class="fas fa-language mr-1"></i> Latim
+                    </button>
+                </div>
+
+                <select id="mysteryType" class="mystery-selector bg-white border border-gray-300 rounded-full px-4 py-2 shadow-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    <option value="joyful">Mistérios Gozosos</option>
+                    <option value="sorrowful">Mistérios Dolorosos</option>
+                    <option value="glorious">Mistérios Gloriosos</option>
+                    <option value="luminous">Mistérios Luminosos</option>
+                </select>
+            </div>
+
+            <!-- Seção Mistério do Dia e Calendário -->
+            <div class="mt-8 text-center fade-in">
+                <div id="dailyMysteryContainer" class="mb-6">
+                    <!-- Conteúdo será preenchido via JS -->
+                    <h3 class="text-xl font-semibold text-indigo-700 mb-2">Mistério do Dia</h3>
+                    <p id="dailyMysteryText" class="text-lg text-gray-800">-</p>
+                </div>
+                <div id="calendarContainer">
+                    <!-- Calendário será gerado via JS -->
+                </div>
+            </div>
+
+            <div id="prayerControls" class="mt-4 hidden"> <!-- Controles originais, mantidos escondidos -->
+                 <div class="flex justify-center items-center gap-4">
+                     <button id="prevPrayer" class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold p-3 rounded-full shadow transition-all" aria-label="Oração anterior">
+                         <i class="fas fa-arrow-left"></i>
+                     </button>
+
+                     <div class="bg-white px-4 py-2 rounded-full shadow">
+                         <span id="currentPrayerCount" class="prayer-counter">1/53</span>
+                     </div>
+
+                     <button id="nextPrayer" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold p-3 rounded-full shadow transition-all transform hover:scale-105" aria-label="Próxima oração">
+                         <i class="fas fa-arrow-right"></i>
+                     </button>
+                 </div>
+
+                 <button id="completeRosary" class="mt-4 bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full shadow transition-all">
+                     <i class="fas fa-check-circle mr-1"></i> Completar Rosário
+                 </button>
+             </div>
+        </header>
+
+        <section id="prayers" class="space-y-8"> <!-- Seção original, mantida escondida -->
+            <!-- Início -->
+            <div id="prayer-0" class="prayer-item bg-white p-6 md:p-8 rounded-xl shadow-lg border border-gray-200 hover:border-indigo-300">
+                <h2 class="text-2xl font-semibold text-indigo-700 mb-5 flex items-center"><i class="fas fa-book-open"></i>Início</h2>
+                <ul class="list-none space-y-3 text-gray-800">
+                    <li data-prayer-id="1"><i class="fas fa-cross text-indigo-500 w-5 text-center mr-2"></i><span class="portuguese-text"></span>
+                        <span class="latin-text"></span>
+                    </li>
+                    <li data-prayer-id="2"><i class="far fa-circle text-indigo-500 w-5 text-center mr-2"></i><span class="portuguese-text"></span>
+                        <span class="latin-text"></span>
+                    </li>
+                    <li data-prayer-id="3"><i class="fas fa-faith text-indigo-500 w-5 text-center mr-2"></i><span class="portuguese-text"></span>
+                        <span class="latin-text"></span>
+                    </li>
+                    <li data-prayer-id="4"><i class="fas fa-pray text-indigo-500 w-5 text-center mr-2"></i><span class="portuguese-text"></span>
+                         <span class="latin-text"></span>
+                    </li>
+                    <li data-prayer-id="5"><i class="fas fa-female text-indigo-500 w-5 text-center mr-2"></i><span class="portuguese-text"></span>
+                         <span class="latin-text"></span>
+                    </li>
+                    <li data-prayer-id="6"><i class="fas fa-star text-indigo-500 w-5 text-center mr-2"></i><span class="portuguese-text"></span>
+                        <span class="latin-text"></span>
+                    </li>
+                    <li data-prayer-id="7"><i class="fas fa-heart text-indigo-500 w-5 text-center mr-2"></i><span class="portuguese-text"></span>
+                        <span class="latin-text"></span>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Mistérios Gozosos -->
+            <div id="joyful-mysteries" class="prayer-item">
+                <div class="bg-gradient-to-r from-white to-blue-50 p-6 md:p-8 rounded-xl shadow-lg border border-gray-200 hover:border-blue-300">
+                    <h2 class="text-2xl font-semibold text-blue-800 mb-5 flex items-center"><i class="fas fa-seedling"></i>Mistérios Gozosos</h2>
+                    <ul class="list-none space-y-3 text-gray-800">
+                        <li data-prayer-id="8"><i class="far fa-comment-dots text-blue-600 w-5 text-center mr-2"></i><span class="portuguese-text"></span>
+                            <span class="latin-text"></span>
+                        </li>
+                        <li data-prayer-id="9"><i class="fas fa-pray text-blue-600 w-5 text-center mr-2"></i><span class="portuguese-text"></span>
+                             <span class="latin-text"></span> </li>
+                        <li data-prayer-id="10" data-ave-maria="1"><i class="fas fa-female text-blue-600 w-5 text-center mr-2"></i><span class="portuguese-text"></span>
+                             <span class="latin-text"></span> </li>
+                        <li data-prayer-id="59"><i class="fas fa-star text-blue-600 w-5 text-center mr-2"></i><span class="portuguese-text"></span>
+                            <span class="latin-text"></span> </li>
+                        <li data-prayer-id="60"><i class="fas fa-heart text-blue-600 w-5 text-center mr-2"></i><span class="portuguese-text"></span>
+                            <span class="latin-text"></span> </li>
+                    </ul>
+                </div>
+
+                <div class="bg-gradient-to-r from-white to-blue-50 p-6 md:p-8 rounded-xl shadow-lg border border-gray-200 hover:border-blue-300 mt-6">
+                    <ul class="list-none space-y-3 text-gray-800">
+                        <li data-prayer-id="11"><i class="far fa-comment-dots text-blue-600 w-5 text-center mr-2"></i><span class="portuguese-text"></span>
+                            <span class="latin-text"></span>
+                        </li>
+                        <li data-prayer-id="12"><i class="fas fa-pray text-blue-600 w-5 text-center mr-2"></i><span class="portuguese-text"></span>
+                             <span class="latin-text"></span> </li>
+                        <li data-prayer-id="13" data-ave-maria="1"><i class="fas fa-female text-blue-600 w-5 text-center mr-2"></i><span class="portuguese-text"></span>
+                             <span class="latin-text"></span> </li>
+                        <li data-prayer-id="61"><i class="fas fa-star text-blue-600 w-5 text-center mr-2"></i><span class="portuguese-text"></span>
+                            <span class="latin-text"></span> </li>
+                        <li data-prayer-id="62"><i class="fas fa-heart text-blue-600 w-5 text-center mr-2"></i><span class="portuguese-text"></span>
+                            <span class="latin-text"></span> </li>
+                    </ul>
+                </div>
+
+                <div class="bg-gradient-to-r from-white to-blue-50 p-6 md:p-8 rounded-xl shadow-lg border border-gray-200 hover:border-blue-300 mt-6">
+                    <ul class="list-none space-y-3 text-gray-800">
+                        <li data-prayer-id="14"><i class="far fa-comment-dots text-blue-600 w-5 text-center mr-2"></i><span class="portuguese-text"></span>
+                            <span class="latin-text"></span>
+                        </li>
+                        <li data-prayer-id="15"><i class="fas fa-pray text-blue-600 w-5 text-center mr-2"></i><span class="portuguese-text"></span>
+                             <span class="latin-text"></span> </li>
+                        <li data-prayer-id="16" data-ave-maria="1"><i class="fas fa-female text-blue-600 w-5 text-center mr-2"></i><span class="portuguese-text"></span>
+                             <span class="latin-text"></span> </li>
+                        <li data-prayer-id="63"><i class="fas fa-star text-blue-600 w-5 text-center mr-2"></i><span class="portuguese-text"></span>
+                            <span class="latin-text"></span> </li>
+                        <li data-prayer-id="64"><i class="fas fa-heart text-blue-600 w-5 text-center mr-2"></i><span class="portuguese-text"></span>
+                            <span class="latin-text"></span> </li>
+                    </ul>
+                </div>
+
+                <div class="bg-gradient-to-r from-white to-blue-50 p-6 md:p-8 rounded-xl shadow-lg border border-gray-200 hover:border-blue-300 mt-6">
+                    <ul class="list-none space-y-3 text-gray-800">
+                        <li data-prayer-id="17"><i class="far fa-comment-dots text-blue-600 w-5 text-center mr-2"></i><span class="portuguese-text"></span>
+                            <span class="latin-text"></span>
+                        </li>
+                        <li data-prayer-id="18"><i class="fas fa-pray text-blue-600 w-5 text-center mr-2"></i><span class="portuguese-text"></span>
+                             <span class="latin-text"></span> </li>
+                        <li data-prayer-id="19" data-ave-maria="1"><i class="fas fa-female text-blue-600 w-5 text-center mr-2"></i><span class="portuguese-text"></span>
+                             <span class="latin-text"></span> </li>
+                        <li data-prayer-id="65"><i class="fas fa-star text-blue-600 w-5 text-center mr-2"></i><span class="portuguese-text"></span>
+                            <span class="latin-text"></span> </li>
+                        <li data-prayer-id="66"><i class="fas fa-heart text-blue-600 w-5 text-center mr-2"></i><span class="portuguese-text"></span>
+                            <span class="latin-text"></span> </li>
+                    </ul>
+                </div>
+
+                <div class="bg-gradient-to-r from-white to-blue-50 p-6 md:p-8 rounded-xl shadow-lg border border-gray-200 hover:border-blue-300 mt-6">
+                    <ul class="list-none space-y-3 text-gray-800">
+                        <li data-prayer-id="20"><i class="far fa-comment-dots text-blue-600 w-5 text-center mr-2"></i><span class="portuguese-text"></span>
+                            <span class="latin-text"></span>
+                        </li>
+                        <li data-prayer-id="21"><i class="fas fa-pray text-blue-600 w-5 text-center mr-2"></i><span class="portuguese-text"></span>
+                             <span class="latin-text"></span> </li>
+                        <li data-prayer-id="22" data-ave-maria="1"><i class="fas fa-female text-blue-600 w-5 text-center mr-2"></i><span class="portuguese-text"></span>
+                             <span class="latin-text"></span> </li>
+                        <li data-prayer-id="67"><i class="fas fa-star text-blue-600 w-5 text-center mr-2"></i><span class="portuguese-text"></span>
+                            <span class="latin-text"></span> </li>
+                        <li data-prayer-id="68"><i class="fas fa-heart text-blue-600 w-5 text-center mr-2"></i><span class="portuguese-text"></span>
+                            <span class="latin-text"></span> </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Orações Finais -->
+            <div id="prayer-6" class="prayer-item bg-white p-6 md:p-8 rounded-xl shadow-lg border border-gray-200 hover:border-indigo-300">
+                <h2 class="text-2xl font-semibold text-indigo-700 mb-5 flex items-center"><i class="fas fa-flag-checkered"></i>Orações Finais</h2>
+                <ul class="list-none space-y-3 text-gray-800">
+                    <li data-prayer-id="69"><i class="fas fa-hands-praying text-indigo-500 w-5 text-center mr-2"></i><span class="portuguese-text"></span>
+                        <span class="latin-text"></span>
+                    </li>
+                    <li data-prayer-id="70"><i class="fas fa-crown text-indigo-500 w-5 text-center mr-2"></i><span class="portuguese-text"></span>
+                        <span class="latin-text"></span>
+                    </li>
+                     <li data-prayer-id="71"><i class="fas fa-cross text-indigo-500 w-5 text-center mr-2"></i><span class="portuguese-text"></span>
+                        <span class="latin-text"></span>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <footer class="text-center mt-12 pt-8 border-t border-indigo-200 fade-in">
+            <p class="text-sm text-gray-600">&copy; <span id="year"></span> Guia do Santo Rosário. Feito com <i class="fas fa-heart text-red-500"></i>. Por <i>~ H5</i></p>
+            <p class="text-sm text-gray-500 mt-1">Entre: <a href="https://t.me/btcbluepill" target="_blank" class="text-indigo-600 hover:text-indigo-800">✨ ₿itcoin ßluePill 🪼</a></p>
+        </footer>
+    </div>
+
+    <script src="./main.js"></script>
+</body>
+</html>
