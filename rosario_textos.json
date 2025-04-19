@@ -147,6 +147,14 @@
           "iii": "Terceiro mistério: A Vinda do Espírito Santo sobre os discípulos e sobre a Virgem Maria",
           "iv": "Quarto mistério: A Assunção da Virgem Maria ao céu",
           "v": "Quinto mistério: A Coroação da Virgem Maria como Rainha do céu"
+        },
+        "luminous": {
+          "title": "Mistérios Luminosos",
+          "i": "Primeiro mistério: O Batismo de Jesus no Rio Jordão",
+          "ii": "Segundo mistério: A Autorrevelação de Jesus nas Bodas de Caná",
+          "iii": "Terceiro mistério: O Anúncio do Reino de Deus com o convite à conversão",
+          "iv": "Quarto mistério: A Transfiguração de Jesus no Monte Tabor",
+          "v": "Quinto mistério: A Instituição da Eucaristia na Última Ceia"
         }
       },
       "la": {
@@ -173,6 +181,14 @@
           "iii": "Tértium mystérium est: Advéntus Spíritus Sancti in discípulos et Beátæ Maríæ Vírginis",
           "iv": "Quartum mystérium est: Assúmptio Beátæ Maríæ Vírginis ad cáelum",
           "v": "Quintum mystérium est: Coronátio Beátæ Maríæ Vírginis in cáelis"
+        },
+        "luminous": {
+          "title": "Mysteria Lucis",
+          "i": "Prímum mystérium est: Baptísma Iesu in flúmine Iordáne",
+          "ii": "Secúndum mystérium est: Auto-revelátio Iesu in núptiis Canáensibus",
+          "iii": "Tertium mystérium est: Proclamátio Regni Dei cum invitaménto ad conversiónem",
+          "iv": "Quartum mystérium est: Transfigurátio Iesu in monte Tábor",
+          "v": "Quintum mystérium est: Institutio Eucharístiae in Última Cena"
         }
       }
     },
@@ -189,6 +205,9 @@
       "glorious": [
         "wednesday",
         "sunday"
+      ],
+      "luminous": [
+        "thursday"
       ]
     }
   }

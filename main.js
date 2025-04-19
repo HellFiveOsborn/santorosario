@@ -26,7 +26,7 @@ $(document).ready(function () {
         currentFontSize: 1.6, // Tamanho inicial em rem
         isLastPrayer: false, // Indica se é a última oração do rosário
         highlightFinished: false, // Indica se o highlight da última oração terminou
-        activeMysteries: { joyful: true, sorrowful: true, glorious: true, luminous: false } // Estado inicial dos mistérios ativos
+        activeMysteries: { joyful: true, dolorous: true, glorious: true, luminous: false } // Estado inicial dos mistérios ativos
     };
 
     // Cache de elementos jQuery
@@ -50,7 +50,7 @@ $(document).ready(function () {
         // Checkboxes de seleção de mistérios
         mysteryCheckboxes: $('.mystery-checkbox'),
         joyfulCheckbox: $('#joyfulCheckbox'),
-        sorrowfulCheckbox: $('#sorrowfulCheckbox'),
+        dolorousCheckbox: $('#dolorousCheckbox'),
         gloriousCheckbox: $('#gloriousCheckbox'),
         luminousCheckbox: $('#luminousCheckbox'),
         // Novos elementos para a interface de slide
@@ -156,7 +156,7 @@ $(document).ready(function () {
                 const parsedPrefs = JSON.parse(savedPrefs);
                 // Valida se o formato é o esperado
                 if (typeof parsedPrefs === 'object' && parsedPrefs !== null &&
-                    'joyful' in parsedPrefs && 'sorrowful' in parsedPrefs &&
+                    'joyful' in parsedPrefs && 'dolorous' in parsedPrefs &&
                     'glorious' in parsedPrefs && 'luminous' in parsedPrefs) {
                     state.activeMysteries = parsedPrefs;
                 } else {
@@ -172,7 +172,7 @@ $(document).ready(function () {
         }
         // Aplica as preferências carregadas (ou padrão) aos checkboxes
         $elements.joyfulCheckbox.prop('checked', state.activeMysteries.joyful);
-        $elements.sorrowfulCheckbox.prop('checked', state.activeMysteries.sorrowful);
+        $elements.dolorousCheckbox.prop('checked', state.activeMysteries.dolorous);
         $elements.gloriousCheckbox.prop('checked', state.activeMysteries.glorious);
         $elements.luminousCheckbox.prop('checked', state.activeMysteries.luminous);
     }
@@ -182,7 +182,7 @@ $(document).ready(function () {
      */
     function saveMysteryPreferences() {
         state.activeMysteries.joyful = $elements.joyfulCheckbox.is(':checked');
-        state.activeMysteries.sorrowful = $elements.sorrowfulCheckbox.is(':checked');
+        state.activeMysteries.dolorous = $elements.dolorousCheckbox.is(':checked');
         state.activeMysteries.glorious = $elements.gloriousCheckbox.is(':checked');
         state.activeMysteries.luminous = $elements.luminousCheckbox.is(':checked');
         localStorage.setItem('activeMysteries', JSON.stringify(state.activeMysteries));
@@ -198,7 +198,7 @@ $(document).ready(function () {
 
         const mysteryOptions = [
             { value: 'joyful', text: 'Mistérios Gozosos' },
-            { value: 'sorrowful', text: 'Mistérios Dolorosos' },
+            { value: 'dolorous', text: 'Mistérios Dolorosos' },
             { value: 'glorious', text: 'Mistérios Gloriosos' },
             { value: 'luminous', text: 'Mistérios Luminosos' }
         ];
@@ -260,31 +260,65 @@ $(document).ready(function () {
     // Define o mistério do Rosário baseado no dia da semana, respeitando as preferências
     function setMysteryByDay() {
         const dayOfWeek = new Date().getDay(); // 0=Domingo, 1=Segunda, ..., 6=Sábado
-        let mysteryKey = 'joyful'; // Padrão inicial
+        let targetMysteryKey = 'joyful'; // Padrão inicial
 
+        // 1. Determina o mistério *ideal* para o dia, considerando a ativação dos Luminosos
         switch (dayOfWeek) {
-            case 1: case 6: mysteryKey = 'joyful'; break; // Seg, Sab
-            case 2: case 5: mysteryKey = 'sorrowful'; break; // Ter, Sex
-            case 3: case 0: mysteryKey = 'glorious'; break; // Qua, Dom
-            case 4: mysteryKey = 'luminous'; break; // Qui
+            case 1: // Segunda
+            case 6: // Sábado
+                targetMysteryKey = 'joyful';
+                break;
+            case 2: // Terça
+            case 5: // Sexta
+                targetMysteryKey = 'dolorous';
+                break;
+            case 3: // Quarta
+            case 0: // Domingo
+                targetMysteryKey = 'glorious';
+                break;
+            case 4: // Quinta-feira
+                // Verifica se os Mistérios Luminosos estão ativos nas preferências do usuário
+                if (state.activeMysteries.luminous) {
+                    targetMysteryKey = 'luminous'; // Usa Luminosos se ativos
+                } else {
+                    targetMysteryKey = 'joyful'; // Usa Gozosos se Luminosos estiverem desativados
+                }
+                break;
         }
 
-        // Verifica se o mistério do dia está ativo nas preferências
-        if (state.activeMysteries[mysteryKey]) {
-            state.currentMysteryType = mysteryKey; // Define o tipo no estado
-            $elements.mysteryType.val(mysteryKey); // Seleciona no dropdown
+        // 2. Verifica se o mistério ideal determinado está ativo nas preferências
+        if (state.activeMysteries[targetMysteryKey]) {
+            state.currentMysteryType = targetMysteryKey; // Define o tipo no estado
+            $elements.mysteryType.val(targetMysteryKey); // Seleciona no dropdown
+            console.log(`Mistério do dia (${targetMysteryKey}) ativo e selecionado.`);
         } else {
-            // Se o mistério do dia não estiver ativo, seleciona o primeiro ativo no dropdown
-            const firstActiveOption = $elements.mysteryType.find('option:first').val();
-            if (firstActiveOption) {
-                state.currentMysteryType = firstActiveOption;
-                $elements.mysteryType.val(firstActiveOption);
+            // 3. Se o mistério ideal não estiver ativo, encontra o primeiro mistério ativo disponível como fallback
+            console.warn(`Mistério ideal do dia (${targetMysteryKey}) está desativado nas preferências.`);
+            // Define a ordem de fallback preferencial (pode ser ajustada se necessário)
+            const fallbackOrder = ['joyful', 'dolorous', 'glorious', 'luminous'];
+            let fallbackMysteryKey = '';
+
+            for (const key of fallbackOrder) {
+                // Verifica se a chave existe em activeMysteries e se está ativa
+                if (state.activeMysteries.hasOwnProperty(key) && state.activeMysteries[key]) {
+                    fallbackMysteryKey = key;
+                    break; // Encontrou o primeiro ativo na ordem, sai do loop
+                }
+            }
+
+            if (fallbackMysteryKey) {
+                state.currentMysteryType = fallbackMysteryKey;
+                $elements.mysteryType.val(fallbackMysteryKey);
+                console.log(`Selecionando o primeiro mistério ativo como fallback: ${fallbackMysteryKey}`);
             } else {
-                // Nenhum mistério ativo, o dropdown já deve ter a opção "Nenhum..."
+                // 4. Caso extremo: nenhum mistério está ativo
                 state.currentMysteryType = '';
+                $elements.mysteryType.val(''); // O dropdown já deve ter a opção "Nenhum..."
+                console.error("Nenhum mistério está ativo nas preferências. Não é possível selecionar um mistério.");
+                // Considerar desabilitar o botão de iniciar oração ou mostrar um aviso mais proeminente
             }
         }
-        console.log("Mistério inicial definido para:", state.currentMysteryType || "Nenhum");
+        console.log("Mistério final definido para:", state.currentMysteryType || "Nenhum");
     }
 
     /* Comentado: A lógica antiga de definir o mistério padrão foi movida para setMysteryByDay
@@ -299,7 +333,7 @@ $(document).ready(function () {
             break;
         case 2: // Terça-feira
         case 5: // Sexta-feira
-            mistérioPadrão = 'sorrowful';
+            mistérioPadrão = 'dolorous';
             break;
         case 3: // Quarta-feira
         case 0: // Domingo
@@ -325,7 +359,7 @@ $(document).ready(function () {
     function updateLegend() {
         const mysteryColors = {
             joyful: 'bg-blue-200 border-blue-400',
-            sorrowful: 'bg-red-200 border-red-400',
+            dolorous: 'bg-red-200 border-red-400',
             glorious: 'bg-yellow-200 border-yellow-400',
             luminous: 'bg-purple-200 border-purple-400',
             disabled: 'bg-gray-300 border-gray-400' // Cor para desativado
@@ -480,6 +514,9 @@ $(document).ready(function () {
             if (!$elements.speedControl.is(event.target) && $elements.speedControl.has(event.target).length === 0) {
                 $elements.speedControl.removeClass('open');
             }
+             if (!$elements.speedControlDesktop.is(event.target) && $elements.speedControlDesktop.has(event.target).length === 0) {
+                $elements.speedControlDesktop.removeClass('open');
+            }
         });
 
         // Eventos para o modal de idioma
@@ -523,43 +560,61 @@ $(document).ready(function () {
 
     /**
      * Retorna o nome, chave e classe CSS do mistério para uma data específica.
+     * Considera a preferência de Mistérios Luminosos para a Quinta-feira.
      * @param {Date} date - O objeto Date para verificar.
      * @returns {object} - Objeto com { name, key, colorClass, isActive }.
      */
     function getMysteryForDate(date) {
         const dayOfWeek = date.getDay(); // 0=Domingo, 1=Segunda, ..., 6=Sábado
-        let mysteryInfo = { name: 'Desconhecido', key: 'unknown', colorClass: 'bg-gray-100 text-gray-800 border-gray-300', isActive: false };
+        let mysteryKey = 'unknown';
+        let mysteryName = 'Desconhecido';
+        let colorClass = 'bg-gray-100 text-gray-800 border-gray-300'; // Padrão
 
         switch (dayOfWeek) {
             case 1: // Segunda
             case 6: // Sábado
-                mysteryInfo = { name: 'Mistérios Gozosos', key: 'joyful', colorClass: 'bg-blue-100 text-blue-800 border-blue-300' };
+                mysteryKey = 'joyful';
+                mysteryName = 'Mistérios Gozosos';
+                colorClass = 'bg-blue-100 text-blue-800 border-blue-300';
                 break;
             case 2: // Terça
             case 5: // Sexta
-                mysteryInfo = { name: 'Mistérios Dolorosos', key: 'sorrowful', colorClass: 'bg-red-100 text-red-800 border-red-300' };
+                mysteryKey = 'dolorous';
+                mysteryName = 'Mistérios Dolorosos';
+                colorClass = 'bg-red-100 text-red-800 border-red-300';
                 break;
             case 3: // Quarta
             case 0: // Domingo
-                mysteryInfo = { name: 'Mistérios Gloriosos', key: 'glorious', colorClass: 'bg-yellow-100 text-yellow-800 border-yellow-300' };
+                mysteryKey = 'glorious';
+                mysteryName = 'Mistérios Gloriosos';
+                colorClass = 'bg-yellow-100 text-yellow-800 border-yellow-300';
                 break;
-            case 4: // Quinta
-                mysteryInfo = { name: 'Mistérios Luminosos', key: 'luminous', colorClass: 'bg-purple-100 text-purple-800 border-purple-300' };
+            case 4: // Quinta-feira
+                if (state.activeMysteries.luminous) {
+                    mysteryKey = 'luminous';
+                    mysteryName = 'Mistérios Luminosos';
+                    colorClass = 'bg-purple-100 text-purple-800 border-purple-300';
+                } else {
+                    mysteryKey = 'joyful'; // Gozosos se Luminosos desativados
+                    mysteryName = 'Mistérios Gozosos';
+                    colorClass = 'bg-blue-100 text-blue-800 border-blue-300';
+                }
                 break;
         }
 
         // Verifica se o mistério determinado está ativo nas preferências do usuário
-        mysteryInfo.isActive = state.activeMysteries[mysteryInfo.key] ?? false; // Usa ?? para caso a key seja 'unknown'
+        const isActive = state.activeMysteries[mysteryKey] ?? false;
 
-        return mysteryInfo;
+        return { name: mysteryName, key: mysteryKey, colorClass: colorClass, isActive: isActive };
     }
+
 
     /**
      * Exibe o mistério do dia atual no elemento apropriado.
      */
     function displayDailyMystery() {
         const today = new Date();
-        const mystery = getMysteryForDate(today);
+        const mystery = getMysteryForDate(today); // Usa a função atualizada
         const $dailyMysteryText = $('#dailyMysteryText');
         if ($dailyMysteryText.length) {
             let text = `${mystery.name} (${today.toLocaleDateString('pt-BR', { weekday: 'long' })})`;
@@ -567,8 +622,6 @@ $(document).ready(function () {
                 text += ' <span class="text-xs text-red-600 font-medium">(Desativado nas opções)</span>';
             }
             $dailyMysteryText.html(text); // Usa .html() para renderizar o span
-            // Opcional: Adicionar classe ao container para estilização
-            // $('#dailyMysteryContainer').addClass(mystery.colorClass.split(' ')[0]); // Adiciona a classe de fundo
         } else {
             console.warn("Elemento #dailyMysteryText não encontrado.");
         }
@@ -625,8 +678,7 @@ $(document).ready(function () {
         // Dias do Mês
         for (let day = 1; day <= daysInMonth; day++) {
             const date = new Date(year, month, day);
-            const mystery = getMysteryForDate(date);
-            // const mystery = getMysteryForDate(date); // Linha duplicada removida
+            const mystery = getMysteryForDate(date); // Usa a função atualizada
             let dayClasses = `p-1.5 border rounded text-xs cursor-default transition-colors ${mystery.colorClass}`;
             let title = `Dia ${day}: ${mystery.name}`;
 
@@ -784,7 +836,7 @@ $(document).ready(function () {
         let defaultMystery = 'joyful';
         switch (dayOfWeek) {
             case 1: case 6: defaultMystery = 'joyful'; break; // Seg, Sab
-            case 2: case 5: defaultMystery = 'sorrowful'; break; // Ter, Sex
+            case 2: case 5: defaultMystery = 'dolorous'; break; // Ter, Sex
             case 3: case 0: defaultMystery = 'glorious'; break; // Qua, Dom
             case 4: defaultMystery = 'luminous'; break; // Qui
         }
@@ -987,7 +1039,7 @@ $(document).ready(function () {
         if (!state.prayerSlideActive) return; // Só funciona se o slide estiver ativo
 
         // Ignora atalhos se as opções de velocidade estiverem abertas
-        if ($elements.speedControl.hasClass('open')) return;
+        if ($elements.speedControl.hasClass('open') || $elements.speedControlDesktop.hasClass('open')) return;
 
         switch (event.key) {
             case 'ArrowLeft':
@@ -1206,8 +1258,12 @@ $(document).ready(function () {
 
     // Função separada para atualizar apenas a UI do botão de velocidade
     function setHighlightSpeedUI(speed) {
+        // Mobile
         $elements.speedOptionBtns.removeClass('selected');
         $elements.speedOptionBtns.filter(`[data-speed="${speed}"]`).addClass('selected');
+        // Desktop
+        $elements.speedOptionBtnsDesktop.removeClass('selected');
+        $elements.speedOptionBtnsDesktop.filter(`[data-speed="${speed}"]`).addClass('selected');
     }
 
     function toggleAutoplay() {
@@ -1236,6 +1292,10 @@ $(document).ready(function () {
             console.log("Autoplay: Desativado.");
             // Se quiser parar o highlight imediatamente ao desativar:
             // stopWordHighlight();
+            // Verifica se deve mostrar o botão de conclusão após desativar o autoplay
+             if (state.isLastPrayer && state.highlightFinished) {
+                 showFinishButton();
+             }
         }
     }
 
@@ -1261,6 +1321,8 @@ $(document).ready(function () {
             // Desktop
             $elements.autoplayBtnDesktop.addClass('active').attr('title', 'Pausar Autoplay');
             $elements.autoplayBtnDesktop.find('i').removeClass('fa-play').addClass('fa-pause');
+            // Esconde o botão de finalizar quando autoplay está ativo
+            hideFinishButton();
         } else {
             // Mobile
             $elements.autoplayBtn.removeClass('active').attr('title', 'Autoplay Próxima Oração');
@@ -1269,24 +1331,12 @@ $(document).ready(function () {
             $elements.autoplayBtnDesktop.removeClass('active').attr('title', 'Autoplay Próxima Oração');
             $elements.autoplayBtnDesktop.find('i').removeClass('fa-pause').addClass('fa-play');
             
-            // Verifica se deve mostrar o botão de conclusão
-            if (state.isLastPrayer && state.highlightFinished) {
-                showFinishButton();
-            }
+            // Verifica se deve mostrar o botão de conclusão APÓS desativar o autoplay
+            // (A verificação foi movida para dentro do toggleAutoplay para garantir que só apareça quando o autoplay é desativado no final)
+            // if (state.isLastPrayer && state.highlightFinished) {
+            //     showFinishButton();
+            // }
         }
-    }
-
-    // Função para reiniciar o highlight da oração atual
-    function resetHighlight() {
-        if (!state.prayerSlideActive || currentPrayerIndex < 0) return; // Só funciona se uma oração estiver ativa
-
-        console.log("Reiniciando highlight...");
-        stopWordHighlight(); // Para qualquer highlight existente e remove classe .highlight
-        clearTimeout(autoplayTimer); // Cancela qualquer avanço automático pendente
-        currentWordIndex = 0; // Volta para a primeira palavra (será usado por startWordHighlight)
-
-        // Reinicia o processo de highlight do começo da oração atual
-        startWordHighlight();
     }
 
     // Função para rolar suavemente até a palavra destacada
@@ -1322,22 +1372,20 @@ $(document).ready(function () {
     // Função para mostrar o botão de conclusão
     function showFinishButton() {
         // Se o botão ainda não existe, cria-o
-        if (!$elements.finishPrayerBtn) {
-            $elements.finishPrayerBtn = $('#finishPrayerBtn');
-            if ($elements.finishPrayerBtn.length === 0) {
-                $elements.finishPrayerBtn = $('<button id="finishPrayerBtn" class="finish-prayer-btn" title="Concluir Rosário"><i class="fas fa-check-circle"></i></button>');
-                $elements.prayerSlide.append($elements.finishPrayerBtn);
-                
-                // Adiciona o evento de clique
-                $elements.finishPrayerBtn.on('click', function() {
-                    closePrayerSlide();
-                    showCompletionModal();
-                });
-            }
+        if (!$elements.finishPrayerBtn || $elements.finishPrayerBtn.length === 0) {
+             $elements.finishPrayerBtn = $('<button id="finishPrayerBtn" class="finish-prayer-btn hidden" title="Concluir Rosário"><i class="fas fa-check-circle"></i></button>');
+             $elements.prayerSlide.append($elements.finishPrayerBtn);
+             // Adiciona o evento de clique apenas uma vez
+             $elements.finishPrayerBtn.on('click', function() {
+                 closePrayerSlide();
+                 showCompletionModal();
+             });
         }
         
-        // Mostra o botão
-        $elements.finishPrayerBtn.removeClass('hidden').addClass('active');
+        // Mostra o botão apenas se não estiver no modo autoplay
+        if (!state.isAutoplayActive) {
+            $elements.finishPrayerBtn.removeClass('hidden').addClass('active');
+        }
     }
     
     // Função para esconder o botão de conclusão
